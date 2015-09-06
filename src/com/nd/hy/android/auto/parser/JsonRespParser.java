@@ -1,11 +1,15 @@
 package com.nd.hy.android.auto.parser;
 
-import com.nd.hy.android.auto.fields.JavaImport;
+import com.nd.hy.android.auto.define.TmplModelFields;
+import com.nd.hy.android.auto.define.JavaImport;
+import com.nd.hy.android.auto.define.TmplComFields;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
+
+import static com.nd.hy.android.auto.define.TmplModelFields.*;
 
 
 /**
@@ -45,10 +49,10 @@ public class JsonRespParser implements ResponseParser {
     private void findModel(Object object, Map<String, Object> model) throws JSONException{
 
         Set<String> importList = new HashSet<>();
-        model.put(IModelFields.IMPORT_LIST, importList);
+        model.put(TmplComFields.IMPORT_LIST, importList);
 
         List<Map<String, Object>> fieldsList = new ArrayList<>();
-        model.put(IModelFields.FIELDS_LIST, fieldsList);
+        model.put(TmplModelFields.FIELDS_LIST, fieldsList);
 
         if(object instanceof  JSONObject) {
             JSONObject jsonObject = (JSONObject)object;
@@ -61,11 +65,11 @@ public class JsonRespParser implements ResponseParser {
                 if(item instanceof JSONObject) {
 
                     Map<String, Object> subModel = new HashMap<>();
-                    map.put(IModelTemplateFields.SUB_CLASS, subModel);
-                    map.put(IModelTemplateFields.CLASS_NAME, upperCaseFirstLetter(key)+"Entity");
-                    map.put(IModelTemplateFields.TYPE, map.get(IModelTemplateFields.CLASS_NAME));
-                    map.put(IModelTemplateFields.NAME, key);
-                    map.put(IModelTemplateFields.FN_NAME, upperCaseFirstLetter(key));
+                    map.put(TmplModelFields.SUB_CLASS, subModel);
+                    map.put(CLASS_NAME, upperCaseFirstLetter(key)+"Entity");
+                    map.put(FIELDS_TYPE, map.get(CLASS_NAME));
+                    map.put(TmplModelFields.FIELDS_NAME, key);
+                    map.put(FN_NAME, upperCaseFirstLetter(key));
                     fieldsList.add(map);
 
                     //递归查找子Model
@@ -79,11 +83,11 @@ public class JsonRespParser implements ResponseParser {
                         if(subObject instanceof JSONObject) {
 
                             Map<String, Object> subModel = new HashMap<>();
-                            map.put(IModelTemplateFields.SUB_CLASS, subModel);
-                            map.put(IModelTemplateFields.CLASS_NAME, upperCaseFirstLetter(key)+"Entity");
-                            map.put(IModelTemplateFields.TYPE, "List<" + map.get(IModelTemplateFields.CLASS_NAME) + ">");
-                            map.put(IModelTemplateFields.NAME, key);
-                            map.put(IModelTemplateFields.FN_NAME, upperCaseFirstLetter(key));
+                            map.put(TmplModelFields.SUB_CLASS, subModel);
+                            map.put(CLASS_NAME, upperCaseFirstLetter(key)+"Entity");
+                            map.put(FIELDS_TYPE, "List<" + map.get(CLASS_NAME) + ">");
+                            map.put(TmplModelFields.FIELDS_NAME, key);
+                            map.put(FN_NAME, upperCaseFirstLetter(key));
                             fieldsList.add(map);
                             importList.add(JavaImport.LIST);
 
@@ -92,40 +96,40 @@ public class JsonRespParser implements ResponseParser {
                         } else {
 
                             if(subObject instanceof Boolean) {
-                                map.put(IModelTemplateFields.TYPE, "List<Boolean>");
+                                map.put(FIELDS_TYPE, "List<Boolean>");
                             } else if(subObject instanceof Integer) {
-                                map.put(IModelTemplateFields.TYPE, "List<Integer>");
+                                map.put(FIELDS_TYPE, "List<Integer>");
                             } else if(subObject instanceof Long) {
-                                map.put(IModelTemplateFields.TYPE, "List<Long>");
+                                map.put(FIELDS_TYPE, "List<Long>");
                             } else if(subObject instanceof Float) {
-                                map.put(IModelTemplateFields.TYPE, "List<Float>");
+                                map.put(FIELDS_TYPE, "List<Float>");
                             } else if(subObject instanceof Double) {
-                                map.put(IModelTemplateFields.TYPE, "List<Double>");
+                                map.put(FIELDS_TYPE, "List<Double>");
                             } else {
-                                map.put(IModelTemplateFields.TYPE, "List<String>");
+                                map.put(FIELDS_TYPE, "List<String>");
                             }
-                            map.put(IModelTemplateFields.NAME, key);
-                            map.put(IModelTemplateFields.FN_NAME, upperCaseFirstLetter(key));
+                            map.put(TmplModelFields.FIELDS_NAME, key);
+                            map.put(FN_NAME, upperCaseFirstLetter(key));
                             fieldsList.add(map);
                             importList.add(JavaImport.LIST);
                         }
                     }
                 } else {
                     if(item instanceof Boolean) {
-                        map.put(IModelTemplateFields.TYPE, "boolean");
+                        map.put(FIELDS_TYPE, "boolean");
                     } else if(item instanceof Integer) {
-                        map.put(IModelTemplateFields.TYPE, "int");
+                        map.put(FIELDS_TYPE, "int");
                     } else if(item instanceof Long) {
-                        map.put(IModelTemplateFields.TYPE, "long");
+                        map.put(FIELDS_TYPE, "long");
                     } else if(item instanceof Float) {
-                        map.put(IModelTemplateFields.TYPE, "float");
+                        map.put(FIELDS_TYPE, "float");
                     } else if(item instanceof Double) {
-                        map.put(IModelTemplateFields.TYPE, "double");
+                        map.put(FIELDS_TYPE, "double");
                     } else {
-                        map.put(IModelTemplateFields.TYPE, "String");
+                        map.put(FIELDS_TYPE, "String");
                     }
-                    map.put(IModelTemplateFields.NAME, key);
-                    map.put(IModelTemplateFields.FN_NAME, upperCaseFirstLetter(key));
+                    map.put(TmplModelFields.FIELDS_NAME, key);
+                    map.put(FN_NAME, upperCaseFirstLetter(key));
                     fieldsList.add(map);
                 }
             }

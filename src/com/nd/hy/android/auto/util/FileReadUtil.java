@@ -3,6 +3,7 @@ package com.nd.hy.android.auto.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Author liangbx
@@ -20,6 +21,13 @@ public class FileReadUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new String(filecontent);//返回文件内容,默认编码
+
+        try {
+            return new String(filecontent, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return null;//返回文件内容,默认编码
     }
 }

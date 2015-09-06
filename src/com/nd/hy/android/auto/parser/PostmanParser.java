@@ -2,6 +2,7 @@ package com.nd.hy.android.auto.parser;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.nd.hy.android.auto.define.HttpFields;
 import com.nd.hy.android.auto.model.Postman;
 import com.nd.hy.android.auto.util.FileReadUtil;
 import com.nd.hy.android.auto.util.StringHelper;

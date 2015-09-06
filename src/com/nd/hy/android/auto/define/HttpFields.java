@@ -1,4 +1,4 @@
-package com.nd.hy.android.auto.parser;
+package com.nd.hy.android.auto.define;
 
 /**
  * Author liangbx
@@ -6,10 +6,19 @@ package com.nd.hy.android.auto.parser;
  */
 public interface HttpFields {
 
+    /**
+     * http 列表
+     */
     String HTTP_LIST = "httpList";
 
+    /**
+     * 请求信息
+     */
     String REQUEST = "request";
 
+    /**
+     * 请求名称
+     */
     String REQUEST_NAME = "RequestName";
 
     /**
@@ -28,14 +37,23 @@ public interface HttpFields {
     String REQUEST_PARAMS = "RequestParams";
 
     /**
-     *
+     * 请求方法名称
      */
     String REQUEST_FN_NAME = "RequestFnName";
 
+    /**
+     * 请求描述信息
+     */
     String REQUEST_DESCRIPTION = "description";
 
+    /**
+     * http 响应信息
+     */
     String RESPONSE = "response";
 
+    /**
+     * http 响应体
+     */
     String RESPONSE_BODY = "body";
 
 

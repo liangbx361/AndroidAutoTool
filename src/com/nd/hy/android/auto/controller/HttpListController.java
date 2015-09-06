@@ -12,7 +12,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import java.util.List;
 import java.util.Map;
 
-import static com.nd.hy.android.auto.parser.HttpFields.*;
+import static com.nd.hy.android.auto.define.HttpFields.*;
 
 /**
  * Author liangbx

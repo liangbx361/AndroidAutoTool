@@ -1,4 +1,4 @@
-package com.nd.hy.android.auto.fields;
+package com.nd.hy.android.auto.define;
 
 /**
  * Author liangbx

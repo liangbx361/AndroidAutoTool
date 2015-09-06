@@ -1,21 +1,30 @@
-package com.nd.hy.android.auto.parser;
+package com.nd.hy.android.auto.define;
 
 /**
  * Author liangbx
  * Date 2015/8/28
- * Model 模板使用用的字段定义
  */
-public interface IModelTemplateFields {
+public interface TmplModelFields {
+
+    /**
+     * Model 类名
+     */
+    String MODEL_NAME = "ModelName";
+
+    /**
+     * 字段列表
+     */
+    String FIELDS_LIST = "FieldsList";
 
     /**
      * 字段数据类型
      */
-    String TYPE = "type";
+    String FIELDS_TYPE = "type";
 
     /**
      * 字段名称
      */
-    String NAME = "name";
+    String FIELDS_NAME = "name";
 
     /**
      * 子类
@@ -31,6 +40,5 @@ public interface IModelTemplateFields {
      * 函数名称
      */
     String FN_NAME = "fnName";
-
 
 }

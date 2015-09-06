@@ -1,10 +1,13 @@
 package com.nd.hy.android.auto.maker;
 
-import com.nd.hy.android.auto.fields.RetrofitImport;
+import com.nd.hy.android.auto.define.*;
 import com.nd.hy.android.auto.parser.*;
+import com.nd.hy.android.auto.parser.RequestMethod;
 
 import java.io.File;
 import java.util.*;
+
+import static com.nd.hy.android.auto.define.TmplModelFields.CLASS_NAME;
 
 /**
  * Author liangbx
@@ -45,7 +48,7 @@ public class CodeProducer {
             Map<String, Object> request = (Map<String, Object>) httpInfo.get(HttpFields.REQUEST);
             Map<String, Object> response = (Map<String, Object>) httpInfo.get(HttpFields.RESPONSE);
 
-            baseInfo.put(IModelFields.MODEL_NAME, request.get(HttpFields.REQUEST_NAME));
+            baseInfo.put(TmplModelFields.MODEL_NAME, request.get(HttpFields.REQUEST_NAME));
             genModel(response.get(HttpFields.RESPONSE_BODY).toString(), baseInfo, genDir);
 
             List<Map<String, Object>> reqParamsList = (List<Map<String, Object>>) request.get(HttpFields.REQUEST_PARAMS);
@@ -53,7 +56,7 @@ public class CodeProducer {
 
             Map<String, Object> apiInfo = new HashMap<>();
             apiList.add(apiInfo);
-            apiInfo.put(IModelFields.MODEL_NAME, baseInfo.get(IModelFields.MODEL_NAME));
+            apiInfo.put(TmplModelFields.MODEL_NAME, baseInfo.get(TmplModelFields.MODEL_NAME));
             apiInfo.put(HttpFields.REQUEST_METHOD, request.get(HttpFields.REQUEST_METHOD));
             apiInfo.put(HttpFields.REQUEST_PATH, request.get(HttpFields.REQUEST_PATH));
             apiInfo.put(HttpFields.REQUEST_PARAMS, request.get(HttpFields.REQUEST_PARAMS));
@@ -73,7 +76,7 @@ public class CodeProducer {
             StringBuilder modelPath = new StringBuilder();
             modelPath.append(baseInfo.get("PackageName").toString());
             modelPath.append(".model.");
-            modelPath.append(baseInfo.get(IModelFields.MODEL_NAME).toString());
+            modelPath.append(baseInfo.get(TmplModelFields.MODEL_NAME).toString());
             importList.add(modelPath.toString());
         }
 
@@ -110,10 +113,10 @@ public class CodeProducer {
         Map<String, Object> model = respParser.getModelParams(respBody);
 
         Map<String, Object> map = new HashMap<>(baseInfo);
-        map.put(IModelFields.FIELDS_LIST, model.get(IModelFields.FIELDS_LIST));
-        map.put(IModelFields.IMPORT_LIST, model.get(IModelFields.IMPORT_LIST));
+        map.put(TmplModelFields.FIELDS_LIST, model.get(TmplModelFields.FIELDS_LIST));
+        map.put(TmplComFields.IMPORT_LIST, model.get(TmplComFields.IMPORT_LIST));
 
-        String modelName = (String) map.get(IModelFields.MODEL_NAME);
+        String modelName = (String) map.get(TmplModelFields.MODEL_NAME);
         File modelFile = new File(modelDir, modelName + ".java");
         try {
             Freemarker.getInstance().process(map, "Model.ftl", modelFile);
@@ -125,21 +128,21 @@ public class CodeProducer {
 
     private void genSubModel(Map<String, Object> model, Map<String, Object> baseInfo, File modelDir, String modelName) {
 
-        List<Map<String, Object>> fieldsList = (List<Map<String, Object>>) model.get(IModelFields.FIELDS_LIST);
+        List<Map<String, Object>> fieldsList = (List<Map<String, Object>>) model.get(TmplModelFields.FIELDS_LIST);
 
         for(int i=0; i<fieldsList.size(); i++) {
 
             Map<String, Object> fields = fieldsList.get(i);
-            if(fields.containsKey(IModelTemplateFields.SUB_CLASS)) {
+            if(fields.containsKey(TmplModelFields.SUB_CLASS)) {
 
-                Map<String, Object> subModel = (Map<String, Object>) fields.get(IModelTemplateFields.SUB_CLASS);
+                Map<String, Object> subModel = (Map<String, Object>) fields.get(TmplModelFields.SUB_CLASS);
 
                 Map<String, Object> codeData = new HashMap<>(baseInfo);
-                codeData.put(IModelFields.MODEL_NAME, fields.get(IModelTemplateFields.CLASS_NAME));
-                codeData.put(IModelFields.FIELDS_LIST, subModel.get(IModelFields.FIELDS_LIST));
-                codeData.put(IModelFields.IMPORT_LIST, subModel.get(IModelFields.IMPORT_LIST));
+                codeData.put(TmplModelFields.MODEL_NAME, fields.get(CLASS_NAME));
+                codeData.put(TmplModelFields.FIELDS_LIST, subModel.get(TmplModelFields.FIELDS_LIST));
+                codeData.put(TmplComFields.IMPORT_LIST, subModel.get(TmplComFields.IMPORT_LIST));
 
-                File modelFile = new File(modelDir, modelName + fields.get(IModelTemplateFields.CLASS_NAME) + ".java");
+                File modelFile = new File(modelDir, modelName + fields.get(CLASS_NAME) + ".java");
                 try {
                     Freemarker.getInstance().process(codeData, "Model.ftl", modelFile);
                 } catch (Exception e) {
@@ -165,14 +168,14 @@ public class CodeProducer {
 
         Map<String, Object> map = new HashMap<>(baseInfo);
         map.put("DataList", dataList);
-        map.put(IActionTemplateFields.ACTION_NAME, baseInfo.get(IModelFields.MODEL_NAME)+"Action");
+        map.put(TmplActionFields.ACTION_NAME, baseInfo.get(TmplModelFields.MODEL_NAME)+"Action");
         String fnParams = getFnParams(dataList);
         if(!"".equals(fnParams)) {
             map.put("Params", getFnParams(dataList));
         }
         map.put("ImportList", new ArrayList<String>());
 
-        File actionFile = new File(actionDir, map.get(IModelFields.MODEL_NAME) + "Action.java");
+        File actionFile = new File(actionDir, map.get(TmplModelFields.MODEL_NAME) + "Action.java");
         try {
             Freemarker.getInstance().process(map, "Action.ftl", actionFile);
         } catch (Exception e) {
@@ -214,9 +217,9 @@ public class CodeProducer {
         }
 
         Map<String, Object> map = new HashMap<>(baseInfo);
-        map.put("ImportList", importList);
-        map.put("RestApiList", restApiList);
-        map.put("ApiProtocolName", "RestApiProtocol");
+        map.put(TmplComFields.IMPORT_LIST, importList);
+        map.put(TmplRestApiFields.API_LIST, restApiList);
+        map.put(TmplRestApiFields.API_PROTOCOL_NAME, "RestApiProtocol");
 
         File actionFile = new File(apiDir, "RestApiProtocol.java");
         try {
