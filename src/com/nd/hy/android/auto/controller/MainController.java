@@ -39,7 +39,7 @@ public class MainController extends BaseController{
     public void showHttpListView(List<Map<String, Object>> httpInfoList) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("../view/http_list_layout.fxml"));
+            loader.setLocation(getClass().getResource("../view/layout_http_list.fxml"));
             Pane pane = loader.load();
 
             rootPane.setCenter(pane);

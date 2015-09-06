@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 /**
  * Author liangbx
@@ -21,7 +22,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Android Auto Tools");
+        this.primaryStage.setTitle("Android Auto Tool");
 
         initRootLayout();
     }
@@ -29,7 +30,8 @@ public class MainApp extends Application {
     public void initRootLayout() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("view/main_layout.fxml"));
+            loader.setResources(ResourceBundle.getBundle("resources.locale.string"));
+            loader.setLocation(getClass().getResource("view/layout_main.fxml"));
             rootParent = loader.load();
 
             MainController controller = loader.getController();

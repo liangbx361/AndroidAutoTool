@@ -1,24 +1,26 @@
 package com.nd.hy.android.auto.controller;
 
+import com.nd.hy.android.auto.define.HttpFields;
 import com.nd.hy.android.auto.maker.CodeProducer;
 import com.nd.hy.android.auto.model.HttpInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
-
-import static com.nd.hy.android.auto.define.HttpFields.*;
+import java.util.ResourceBundle;
 
 /**
  * Author liangbx
  * Date 2015/9/2
  */
-public class HttpListController extends BaseController {
+public class HttpListController extends BaseController implements Initializable{
 
     @FXML
     private TableView<HttpInfo> tableView;
@@ -33,6 +35,11 @@ public class HttpListController extends BaseController {
 
     private List<Map<String, Object>> httpInfoList;
     private ObservableList<HttpInfo> httpInfoData;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 
     @FXML
     private void initialize() {
@@ -59,10 +66,10 @@ public class HttpListController extends BaseController {
         for(int i=0; i<httpInfoList.size(); i++) {
             Map<String, Object> httpInfo = httpInfoList.get(i);
 
-            Map<String, Object> request = (Map<String, Object>) httpInfo.get(REQUEST);
-            String method = (String) request.get(REQUEST_METHOD);
-            String name = (String) request.get(REQUEST_NAME);
-            String description = (String) request.get(REQUEST_DESCRIPTION);
+            Map<String, Object> request = (Map<String, Object>) httpInfo.get(HttpFields.REQUEST);
+            String method = (String) request.get(HttpFields.REQUEST_METHOD);
+            String name = (String) request.get(HttpFields.REQUEST_NAME);
+            String description = (String) request.get(HttpFields.REQUEST_DESCRIPTION);
             httpInfoData.add(new HttpInfo(method, name, description));
         }
     }
@@ -75,4 +82,5 @@ public class HttpListController extends BaseController {
     private void genCode() {
         CodeProducer.getInstance().produceHttpCode(httpInfoList);
     }
+
 }
