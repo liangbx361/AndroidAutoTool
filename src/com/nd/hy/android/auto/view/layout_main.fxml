@@ -7,9 +7,11 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="rootPane" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8"
+<BorderPane fx:id="rootPane" prefHeight="480.0" prefWidth="640.0"
+            styleClass="background" stylesheets="@DarkTheme.css"
+            xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.nd.hy.android.auto.controller.MainController">
+            fx:controller="com.nd.hy.android.auto.controller.MainCtrl">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>

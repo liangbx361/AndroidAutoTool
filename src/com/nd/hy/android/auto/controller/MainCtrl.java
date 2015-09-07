@@ -9,17 +9,29 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Author liangbx
  * Date 2015/9/2
  */
-public class MainController extends BaseController{
+public class MainCtrl extends BaseCtrl {
 
     @FXML
     private BorderPane rootPane;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    @Override
+    protected void initView() {
+
+    }
 
     @FXML
     public void openFile() {
@@ -44,7 +56,7 @@ public class MainController extends BaseController{
 
             rootPane.setCenter(pane);
 
-            HttpListController controller = loader.getController();
+            HttpListCtrl controller = loader.getController();
             controller.setMainApp(mainApp);
             controller.fillTabel(httpInfoList);
 
@@ -52,4 +64,5 @@ public class MainController extends BaseController{
             e.printStackTrace();
         }
     }
+
 }

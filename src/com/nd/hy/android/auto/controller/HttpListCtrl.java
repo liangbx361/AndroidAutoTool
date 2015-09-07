@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
  * Author liangbx
  * Date 2015/9/2
  */
-public class HttpListController extends BaseController implements Initializable{
+public class HttpListCtrl extends BaseCtrl implements Initializable{
 
     @FXML
     private TableView<HttpInfo> tableView;
@@ -38,11 +38,11 @@ public class HttpListController extends BaseController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        initView();
     }
 
-    @FXML
-    private void initialize() {
+    @Override
+    protected void initView() {
         methodColumn.setCellValueFactory(cellData -> cellData.getValue().methodProperty());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         descColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
@@ -82,5 +82,6 @@ public class HttpListController extends BaseController implements Initializable{
     private void genCode() {
         CodeProducer.getInstance().produceHttpCode(httpInfoList);
     }
+
 
 }
