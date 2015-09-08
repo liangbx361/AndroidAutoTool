@@ -29,6 +29,11 @@
                   <Insets right="10.0" />
                </HBox.margin>
             </Button>
+            <Button mnemonicParsing="false" onAction="#handlerBaseModel" text="提取BasedModel">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Button>
                   <Button fx:id="genBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="287.0" layoutY="6.0" mnemonicParsing="false" onAction="#genCode" text="生成" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <effect>
                   <Blend />

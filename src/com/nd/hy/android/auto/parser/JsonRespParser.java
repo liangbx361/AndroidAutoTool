@@ -11,7 +11,6 @@ import java.util.*;
 
 import static com.nd.hy.android.auto.define.TmplModelFields.*;
 
-
 /**
  * Author liangbx
  * Date 2015/8/25

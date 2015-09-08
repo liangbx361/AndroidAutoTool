@@ -2,7 +2,7 @@ package com.nd.hy.android.auto.controller;
 
 import com.nd.hy.android.auto.define.HttpFields;
 import com.nd.hy.android.auto.maker.CodeProducer;
-import com.nd.hy.android.auto.model.HttpInfo;
+import com.nd.hy.android.auto.model.HttpShowInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,18 +23,18 @@ import java.util.ResourceBundle;
 public class HttpListCtrl extends BaseCtrl implements Initializable{
 
     @FXML
-    private TableView<HttpInfo> tableView;
+    private TableView<HttpShowInfo> tableView;
     @FXML
-    private TableColumn<HttpInfo, String> methodColumn;
+    private TableColumn<HttpShowInfo, String> methodColumn;
     @FXML
-    private TableColumn<HttpInfo, String> nameColumn;
+    private TableColumn<HttpShowInfo, String> nameColumn;
     @FXML
-    private TableColumn<HttpInfo, String> descColumn;
+    private TableColumn<HttpShowInfo, String> descColumn;
     @FXML
-    private TableColumn<HttpInfo, Boolean> genCheckColumn;
+    private TableColumn<HttpShowInfo, Boolean> genCheckColumn;
 
     private List<Map<String, Object>> httpInfoList;
-    private ObservableList<HttpInfo> httpInfoData;
+    private ObservableList<HttpShowInfo> httpShowInfoData;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,11 +58,11 @@ public class HttpListCtrl extends BaseCtrl implements Initializable{
         this.httpInfoList = httpInfoList;
         fillData();
 
-        tableView.setItems(httpInfoData);
+        tableView.setItems(httpShowInfoData);
     }
 
     private void fillData() {
-        httpInfoData = FXCollections.observableArrayList();
+        httpShowInfoData = FXCollections.observableArrayList();
         for(int i=0; i<httpInfoList.size(); i++) {
             Map<String, Object> httpInfo = httpInfoList.get(i);
 
@@ -70,11 +70,11 @@ public class HttpListCtrl extends BaseCtrl implements Initializable{
             String method = (String) request.get(HttpFields.REQUEST_METHOD);
             String name = (String) request.get(HttpFields.REQUEST_NAME);
             String description = (String) request.get(HttpFields.REQUEST_DESCRIPTION);
-            httpInfoData.add(new HttpInfo(method, name, description));
+            httpShowInfoData.add(new HttpShowInfo(method, name, description));
         }
     }
 
-    private void showDetail(HttpInfo httpInfo) {
+    private void showDetail(HttpShowInfo httpShowInfo) {
         System.out.println("showDetail");
     }
 
@@ -83,5 +83,15 @@ public class HttpListCtrl extends BaseCtrl implements Initializable{
         CodeProducer.getInstance().produceHttpCode(httpInfoList);
     }
 
+    /**
+     * 如果数据最外层是通用的，则提取最外层作为BasedModel
+     */
+    @FXML
+    private void handlerBaseModel() {
 
+    }
+
+    private void getBaseModel() {
+
+    }
 }

@@ -29,9 +29,9 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Android Http代码自动生成工具");
 
-//        initRootLayout();
+        initRootLayout();
 
-        testTable(0, primaryStage);
+//        testTable(0, primaryStage);
     }
 
 

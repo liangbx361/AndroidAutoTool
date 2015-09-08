@@ -11,5 +11,10 @@ import java.util.Set;
  */
 public interface ResponseParser {
 
+    /**
+     * 生成Model相关数据
+     * @param response
+     * @return
+     */
     Map<String, Object> getModelParams(String response);
 }
