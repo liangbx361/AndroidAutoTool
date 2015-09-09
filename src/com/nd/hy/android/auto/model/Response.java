@@ -8,8 +8,13 @@ import java.util.List;
  */
 public class Response {
 
-    /**
-     * 响应字段列表
-     */
-    List<ModelField> fieldList;
+    private Model model;
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
 }

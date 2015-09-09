@@ -10,13 +10,18 @@ import javafx.beans.property.StringProperty;
 public class ModelField {
 
     private final StringProperty dataType;
-    private final StringProperty respFieldsName;
-    private final StringProperty genFieldsName;
+    private final StringProperty respFieldName;
+    private final StringProperty genFieldName;
+    private Model subModel;
 
-    public ModelField(String dataType, String respFieldsName, String genFieldsName) {
+    public ModelField() {
+        this(null, null, null);
+    }
+
+    public ModelField(String dataType, String respFieldName, String genFieldName) {
         this.dataType = new SimpleStringProperty(dataType);
-        this.respFieldsName = new SimpleStringProperty(respFieldsName);
-        this.genFieldsName = new SimpleStringProperty(genFieldsName);
+        this.respFieldName = new SimpleStringProperty(respFieldName);
+        this.genFieldName = new SimpleStringProperty(genFieldName);
     }
 
     public String getDataType() {
@@ -31,27 +36,55 @@ public class ModelField {
         this.dataType.set(dataType);
     }
 
-    public String getRespFieldsName() {
-        return respFieldsName.get();
+    public String getRespFieldName() {
+        return respFieldName.get();
     }
 
-    public StringProperty respFieldsNameProperty() {
-        return respFieldsName;
+    public StringProperty respFieldNameProperty() {
+        return respFieldName;
     }
 
-    public void setRespFieldsName(String respFieldsName) {
-        this.respFieldsName.set(respFieldsName);
+    public void setRespFieldName(String respFieldName) {
+        this.respFieldName.set(respFieldName);
     }
 
-    public String getGenFieldsName() {
-        return genFieldsName.get();
+    public String getGenFieldName() {
+        return genFieldName.get();
     }
 
-    public StringProperty genFieldsNameProperty() {
-        return genFieldsName;
+    public StringProperty genFieldNameProperty() {
+        return genFieldName;
     }
 
-    public void setGenFieldsName(String genFieldsName) {
-        this.genFieldsName.set(genFieldsName);
+    public void setGenFieldName(String genFieldName) {
+        this.genFieldName.set(genFieldName);
     }
+
+    public Model getSubModel() {
+        return subModel;
+    }
+
+    public void setSubModel(Model subModel) {
+        this.subModel = subModel;
+    }
+
+    private boolean hasModel() {
+        if(subModel != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean equals(ModelField field) {
+        return getRespFieldName().equals(field.getRespFieldName());
+    };
+
+    public ModelField copy() {
+        ModelField modelField = new ModelField(getDataType() + "", getRespFieldName() + "", getGenFieldName() + "");
+        if(null != getSubModel()) {
+            setSubModel(getSubModel().copy());
+        }
+
+        return modelField;
+    };
 }

@@ -3,7 +3,7 @@ package com.nd.hy.android.auto.parser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nd.hy.android.auto.define.HttpFields;
-import com.nd.hy.android.auto.model.Postman;
+import com.nd.hy.android.auto.model.*;
 import com.nd.hy.android.auto.util.FileReadUtil;
 import com.nd.hy.android.auto.util.StringHelper;
 
@@ -22,6 +22,88 @@ import java.util.Map;
  */
 public class PostmanParser {
 
+    public List<HttpInfo> parserFileToBean(String filePath) {
+        String content = FileReadUtil.readToString(new File(filePath));
+        Gson gson = new Gson();
+        Postman postman = gson.fromJson(content, new TypeToken<Postman>(){}.getType());
+        return getHttpInfoList2(postman);
+    }
+
+    public List<HttpInfo> getHttpInfoList2(Postman postman) {
+
+        List<HttpInfo> httpInfoList = new ArrayList<>();
+        for(Postman.Request pRequest : postman.requests) {
+
+            HttpInfo httpInfo = new HttpInfo();
+            httpInfoList.add(httpInfo);
+
+            //请求
+            Request request = getRequest(pRequest);
+            httpInfo.setRequest(request);
+
+            //响应
+            Response response = getResponse(pRequest.responses);
+            httpInfo.setResponse(response);
+            response.getModel().setModelName(pRequest.name);
+        }
+        return httpInfoList;
+    }
+
+    private Request getRequest(Postman.Request pRequest) {
+        Request request = new Request();
+        request.setReqPath(getPath(pRequest.url));
+        request.setReqMethod(pRequest.method);
+        request.setReqName(pRequest.name);
+        request.setReqDescription(pRequest.description);
+        request.setRequestParamList(getReqParams2(pRequest.url));
+        request.setReqFnName(getReqFnName(pRequest.method, pRequest.name));
+        return request;
+    }
+
+    private List<RequestParam> getReqParams2(String url) {
+        List<RequestParam> paramList = new ArrayList<>();
+
+        try {
+            URI uri = new URI(url);
+            String query = uri.getQuery();
+            if(query != null && !query.equals("")) {
+                String[] params = query.split("&");
+                for(int i=0; i<params.length; i++) {
+                    RequestParam reqParam = new RequestParam();
+
+                    String name = params[i].substring(0, params[i].indexOf("="));
+                    String value = params[i].substring(params[i].indexOf("=")+1);
+                    reqParam.setTypeForUrl("Query");
+                    reqParam.setDataType(getParamType(value));
+                    reqParam.setNameForFn(name);
+                    reqParam.setNameForUrl(name);
+                }
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        return paramList;
+    }
+
+    private Response getResponse(List<Postman.Response> responses) {
+        Response response = new Response();
+        for(Postman.Response pResponse : responses) {
+            if(null != pResponse.text && !"".equals(pResponse.text)) {
+                ResponseParser respParser = new JsonRespParser();
+                Model model = respParser.getModel(pResponse.text);
+                response.setModel(model);
+                break;
+            }
+        }
+
+        if(null == response.getModel()) {
+            throw new IllegalArgumentException("响应字段为空，请检查postman数据");
+        }
+
+        return response;
+    };
+
     public List<Map<String, Object>> parseFile(String filePath) {
         String content = FileReadUtil.readToString(new File(filePath));
         Gson gson = new Gson();
@@ -29,7 +111,7 @@ public class PostmanParser {
         return getHttpInfoList(postman);
     }
 
-    private List<Map<String, Object>> getHttpInfoList(Postman postman) {
+    public List<Map<String, Object>> getHttpInfoList(Postman postman) {
         List<Map<String, Object>> httpInfolist = new ArrayList<>();
         for(int i=0; i<postman.requests.size(); i++) {
             Map<String, Object> httpInfo = new HashMap<>();
@@ -97,7 +179,7 @@ public class PostmanParser {
                     String value = params[i].substring(params[i].indexOf("=")+1);
                     paramsMap.put("FieldsType", "Query");
                     paramsMap.put("Name", name);
-                    paramsMap.put("Type", getParamsType(value));
+                    paramsMap.put("Type", getParamType(value));
                 }
             }
         } catch (URISyntaxException e) {
@@ -107,7 +189,7 @@ public class PostmanParser {
         return paramsList;
     }
 
-    private String getParamsType(String value) {
+    private String getParamType(String value) {
         String dataType = "String";
         try {
             Integer.valueOf(value);

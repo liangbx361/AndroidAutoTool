@@ -1,6 +1,7 @@
 package com.nd.hy.android.auto.controller;
 
 import com.nd.hy.android.auto.MainApp;
+import com.nd.hy.android.auto.model.Model;
 import com.nd.hy.android.auto.model.ModelField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +25,7 @@ import java.util.ResourceBundle;
  * Author liangbx
  * Date 2015/9/7
  */
-public class BaseModelCtrl extends BaseCtrl implements Initializable {
+public class BaseModelCtrl implements Initializable, CommonOptCtrl.OptListener {
 
     @FXML
     private TextField baseModelName;
@@ -33,11 +34,13 @@ public class BaseModelCtrl extends BaseCtrl implements Initializable {
     @FXML
     private TableColumn<ModelField, String> dataType;
     @FXML
-    private TableColumn<ModelField, String> respFieldsName;
+    private TableColumn<ModelField, String> respFieldName;
     @FXML
-    private TableColumn<ModelField, String> genFieldsName;
+    private TableColumn<ModelField, String> genFieldName;
 
-    private List<ModelField> baseModelFieldsList;
+    private Model baseModel;
+
+    private Stage stage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -46,19 +49,20 @@ public class BaseModelCtrl extends BaseCtrl implements Initializable {
 
     protected void initView() {
         dataType.setCellValueFactory(cellData -> cellData.getValue().dataTypeProperty());
-        respFieldsName.setCellValueFactory(cellData -> cellData.getValue().respFieldsNameProperty());
-        genFieldsName.setCellValueFactory(cellData -> cellData.getValue().genFieldsNameProperty());
+        respFieldName.setCellValueFactory(cellData -> cellData.getValue().respFieldNameProperty());
+        genFieldName.setCellValueFactory(cellData -> cellData.getValue().genFieldNameProperty());
 
         modelFieldsTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showEditDialog(newValue)
         );
     }
 
-    public void fillTable(List<ModelField> baseModelFieldsList) {
-        this.baseModelFieldsList = baseModelFieldsList;
+    public void fillTable(Model baseModel) {
+        this.baseModel = baseModel;
+        baseModelName.textProperty().bindBidirectional(baseModel.modelNameProperty());
 
         ObservableList<ModelField> observableList = FXCollections.observableArrayList();
-        observableList.addAll(baseModelFieldsList);
+        observableList.addAll(baseModel.getModelFieldList());
 
         modelFieldsTable.setItems(observableList);
     }
@@ -74,7 +78,7 @@ public class BaseModelCtrl extends BaseCtrl implements Initializable {
             Stage dialogStage = new Stage();
             dialogStage.setTitle("编辑字段");
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainApp.getPrimaryStage());
+            dialogStage.initOwner(stage);
             dialogStage.getIcons().add(new Image("file:resources/images/edit.png"));
             Scene scene = new Scene(dialog);
             dialogStage.setScene(scene);
@@ -86,10 +90,23 @@ public class BaseModelCtrl extends BaseCtrl implements Initializable {
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
 
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void handlerOk() {
+
+    }
+
+    @Override
+    public void handlerCancel() {
+
+    }
+
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

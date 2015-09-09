@@ -1,5 +1,7 @@
 package com.nd.hy.android.auto.parser;
 
+import com.nd.hy.android.auto.model.HttpInfo;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +26,13 @@ public class HttpParseFactory {
         return respInfo;
     }
 
-    public static List<Map<String, Object>> parsePostman(String filePath) {
+//    public static List<Map<String, Object>> parsePostman(String filePath) {
+//        PostmanParser postmanParser = new PostmanParser();
+//        return postmanParser.parseFile(filePath);
+//    }
+
+    public static List<HttpInfo> parsePostman(String filePath) {
         PostmanParser postmanParser = new PostmanParser();
-        return postmanParser.parseFile(filePath);
-    };
+        return postmanParser.parserFileToBean(filePath);
+    }
 }

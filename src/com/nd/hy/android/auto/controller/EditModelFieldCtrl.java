@@ -53,7 +53,7 @@ public class EditModelFieldCtrl extends BaseCtrl {
         this.baseModelField = baseModelFields;
 
         dataTypeCb.setValue(baseModelFields.getDataType());
-        fieldNameTf.setText(baseModelFields.getGenFieldsName());
+        fieldNameTf.setText(baseModelFields.getGenFieldName());
     }
 
     public void setDialogStage(Stage dialogStage) {
@@ -70,7 +70,7 @@ public class EditModelFieldCtrl extends BaseCtrl {
         }
 
         baseModelField.setDataType(type);
-        baseModelField.setGenFieldsName(name);
+        baseModelField.setGenFieldName(name);
 
         dialogStage.close();
     }

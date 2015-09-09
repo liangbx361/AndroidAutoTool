@@ -1,5 +1,7 @@
 package com.nd.hy.android.auto.parser;
 
+import com.nd.hy.android.auto.model.Model;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,9 +14,9 @@ import java.util.Set;
 public interface ResponseParser {
 
     /**
-     * 生成Model相关数据
+     * 将body转换成Model
      * @param response
      * @return
      */
-    Map<String, Object> getModelParams(String response);
+    Model getModel(String body);
 }

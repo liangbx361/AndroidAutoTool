@@ -3,6 +3,8 @@ package com.nd.hy.android.auto.parser;
 import com.nd.hy.android.auto.define.TmplModelFields;
 import com.nd.hy.android.auto.define.JavaImport;
 import com.nd.hy.android.auto.define.TmplComFields;
+import com.nd.hy.android.auto.model.Model;
+import com.nd.hy.android.auto.model.ModelField;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,23 +22,133 @@ public class JsonRespParser implements ResponseParser {
     public static final String TEST_RESPONSE = "{\"a\":[1,2,3,4,5,6],\"b\":[{\"b1\":\"1\"},{\"b2\":\"2\"}],\"c\":true,\"d\":10,\"e\":\"e\",\"f\":1.3,\"g\":{\"g1\":[\"g1\",\"g2\"],\"g2\":[{\"g21\":\"g21\",\"g22\":\"g22\"}]}}";
 
     public static void main(String[] args) {
-        ResponseParser respParser = new JsonRespParser();
-        respParser.getModelParams(TEST_RESPONSE);
+//        ResponseParser respParser = new JsonRespParser();
+//        respParser.getModelParams(TEST_RESPONSE);
+//        respParser.getModel(TEST_RESPONSE);
     }
 
-    @Override
-    public Map<String, Object> getModelParams(String response) {
-
-        Map<String, Object> model = new HashMap<>();
+    public Model getModel(String body) {
+        Model model = new Model();
         try {
-            JSONObject rootJson = new JSONObject(response);
+            JSONObject rootJson = new JSONObject(body);
             findModel(rootJson, model);
-            System.out.println(model);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return model;
+    }
+
+//    public Map<String, Object> getModelParams(String body) {
+//
+//        Map<String, Object> model = new HashMap<>();
+//        try {
+//            JSONObject rootJson = new JSONObject(body);
+//            findModelToMap(rootJson, model);
+//            System.out.println(model);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return model;
+//    }
+
+    /**
+     * 查找用于生成Model的相关信息
+     * @param object
+     * @return
+     * @throws JSONException
+     */
+    private void findModel(Object object, Model model) throws JSONException{
+
+        Set<String> importList = new HashSet<>();
+        model.setImportList(importList);
+
+        List<ModelField> fieldList = new ArrayList<>();
+        model.setModelFieldList(fieldList);
+
+        if(object instanceof  JSONObject) {
+            JSONObject jsonObject = (JSONObject)object;
+            Iterator iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+
+                ModelField modelField = new ModelField();
+                fieldList.add(modelField);
+                String key = iterator.next().toString();
+                Object item = jsonObject.get(key);
+                if(item instanceof JSONObject) {
+
+                    modelField.setDataType(upperCaseFirstLetter(key) + "Entity");
+                    modelField.setRespFieldName(key);
+                    modelField.setGenFieldName(key);
+
+                    //需要再创建一个Model
+                    Model subModel = new Model();
+                    modelField.setSubModel(subModel);
+                    subModel.setModelName(modelField.getDataType());
+
+                    //递归查找子Model
+                    findModel(item, subModel);
+                } else if(item instanceof JSONArray) {
+
+                    JSONArray jsonArray = (JSONArray) item;
+                    if(jsonArray.length() > 0) {
+
+                        model.getImportList().add(JavaImport.LIST);
+                        Object subObject = jsonArray.get(0);
+                        if(subObject instanceof JSONObject) {
+
+
+                            String className = upperCaseFirstLetter(key) + "Entity";
+                            modelField.setDataType("List<" + className + ">");
+                            modelField.setRespFieldName(key);
+                            modelField.setGenFieldName(key);
+
+                            //需要再创建一个Model
+                            Model subModel = new Model();
+                            modelField.setSubModel(subModel);
+                            subModel.setModelName(className);
+
+                            //递归查找子Model
+                            findModel(item, subModel);
+                        } else {
+
+                            if(subObject instanceof Boolean) {
+                                modelField.setDataType("List<Boolean>");
+                            } else if(subObject instanceof Integer) {
+                                modelField.setDataType("List<Integer>");
+                            } else if(subObject instanceof Long) {
+                                modelField.setDataType("List<Integer>");
+                            } else if(subObject instanceof Float) {
+                                modelField.setDataType("List<Integer>");
+                            } else if(subObject instanceof Double) {
+                                modelField.setDataType("List<Integer>");
+                            } else {
+                                modelField.setDataType("List<String>");
+                            }
+                            modelField.setRespFieldName(key);
+                            modelField.setGenFieldName(key);
+                        }
+                    }
+                } else {
+                    if(item instanceof Boolean) {
+                        modelField.setDataType("boolean");
+                    } else if(item instanceof Integer) {
+                        modelField.setDataType("int");
+                    } else if(item instanceof Long) {
+                        modelField.setDataType("long");
+                    } else if(item instanceof Float) {
+                        modelField.setDataType("float");
+                    } else if(item instanceof Double) {
+                        modelField.setDataType("double");
+                    } else {
+                        modelField.setDataType("String");
+                    }
+                    modelField.setRespFieldName(key);
+                    modelField.setGenFieldName(key);
+                }
+            }
+        }
     }
 
     /**
@@ -45,7 +157,7 @@ public class JsonRespParser implements ResponseParser {
      * @return
      * @throws JSONException
      */
-    private void findModel(Object object, Map<String, Object> model) throws JSONException{
+    private void findModelToMap(Object object, Map<String, Object> model) throws JSONException{
 
         Set<String> importList = new HashSet<>();
         model.put(TmplComFields.IMPORT_LIST, importList);
@@ -72,7 +184,7 @@ public class JsonRespParser implements ResponseParser {
                     fieldsList.add(map);
 
                     //递归查找子Model
-                    findModel(item, subModel);
+                    findModelToMap(item, subModel);
                 } else if(item instanceof JSONArray) {
 
                     JSONArray jsonArray = (JSONArray) item;
@@ -91,7 +203,7 @@ public class JsonRespParser implements ResponseParser {
                             importList.add(JavaImport.LIST);
 
                             //递归查找子Model
-                            findModel(item, subModel);
+                            findModelToMap(item, subModel);
                         } else {
 
                             if(subObject instanceof Boolean) {

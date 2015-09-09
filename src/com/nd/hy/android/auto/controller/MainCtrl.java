@@ -1,5 +1,7 @@
 package com.nd.hy.android.auto.controller;
 
+import com.nd.hy.android.auto.MainApp;
+import com.nd.hy.android.auto.model.HttpInfo;
 import com.nd.hy.android.auto.parser.HttpParseFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,22 +45,23 @@ public class MainCtrl extends BaseCtrl {
 
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
         if(file != null) {
-            List<Map<String, Object>> httpInfoList = HttpParseFactory.parsePostman(file.getAbsolutePath());
-            showHttpListView(httpInfoList);
+            List<HttpInfo> httpInfoList = HttpParseFactory.parsePostman(file.getAbsolutePath());
+            MainApp.project.setHttpInfoList(httpInfoList);
+            showHttpList(httpInfoList);
         }
     }
 
-    public void showHttpListView(List<Map<String, Object>> httpInfoList) {
+    public void showHttpList(List<HttpInfo> httpInfoList) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("../view/layout_http_list.fxml"));
+            loader.setLocation(MainApp.class.getResource("view/layout_http_list.fxml"));
             Pane pane = loader.load();
 
             rootPane.setCenter(pane);
 
             HttpListCtrl controller = loader.getController();
             controller.setMainApp(mainApp);
-            controller.fillTabel(httpInfoList);
+            controller.fillTabelView(httpInfoList);
 
         } catch (IOException e) {
             e.printStackTrace();

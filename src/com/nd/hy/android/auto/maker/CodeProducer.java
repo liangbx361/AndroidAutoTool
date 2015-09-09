@@ -104,26 +104,26 @@ public class CodeProducer {
      */
     public void genModel(String respBody, Map<String, Object> baseInfo, File genDir) {
 
-        File modelDir = new File(genDir, "model");
-        if(!modelDir.exists()) {
-            modelDir.mkdirs();
-        }
-
-        ResponseParser respParser = new JsonRespParser();
-        Map<String, Object> model = respParser.getModelParams(respBody);
-
-        Map<String, Object> map = new HashMap<>(baseInfo);
-        map.put(TmplModelFields.FIELDS_LIST, model.get(TmplModelFields.FIELDS_LIST));
-        map.put(TmplComFields.IMPORT_LIST, model.get(TmplComFields.IMPORT_LIST));
-
-        String modelName = (String) map.get(TmplModelFields.MODEL_NAME);
-        File modelFile = new File(modelDir, modelName + ".java");
-        try {
-            Freemarker.getInstance().process(map, "Model.ftl", modelFile);
-            genSubModel(model, baseInfo, modelDir, modelName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        File modelDir = new File(genDir, "model");
+//        if(!modelDir.exists()) {
+//            modelDir.mkdirs();
+//        }
+//
+//        ResponseParser respParser = new JsonRespParser();
+//        Map<String, Object> model = respParser.getModelParams(respBody);
+//
+//        Map<String, Object> map = new HashMap<>(baseInfo);
+//        map.put(TmplModelFields.FIELDS_LIST, model.get(TmplModelFields.FIELDS_LIST));
+//        map.put(TmplComFields.IMPORT_LIST, model.get(TmplComFields.IMPORT_LIST));
+//
+//        String modelName = (String) map.get(TmplModelFields.MODEL_NAME);
+//        File modelFile = new File(modelDir, modelName + ".java");
+//        try {
+//            Freemarker.getInstance().process(map, "Model.ftl", modelFile);
+//            genSubModel(model, baseInfo, modelDir, modelName);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void genSubModel(Map<String, Object> model, Map<String, Object> baseInfo, File modelDir, String modelName) {

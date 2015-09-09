@@ -3,31 +3,33 @@ package com.nd.hy.android.auto.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.List;
+
 /**
  * Author liangbx
  * Date 2015/9/8
+ * DESC 请求Bean定义
  */
 public class Request {
 
     private final StringProperty reqName;
     private final StringProperty reqPath;
     private final StringProperty reqMethod;
-    private final StringProperty reqParams;
     private final StringProperty reqFnName;
     private final StringProperty reqDescription;
 
+    private List<RequestParam> requestParamList;
+
     public Request() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null);
     }
 
-    public Request(StringProperty reqName, StringProperty reqPath, StringProperty reqMethod, StringProperty reqParams,
-                   StringProperty reqFnName, StringProperty reqDescription) {
-        this.reqName = reqName;
-        this.reqPath = reqPath;
-        this.reqMethod = reqMethod;
-        this.reqParams = reqParams;
-        this.reqFnName = reqFnName;
-        this.reqDescription = reqDescription;
+    public Request(String reqName, String reqPath, String reqMethod, String reqFnName, String reqDescription) {
+        this.reqName = new SimpleStringProperty(reqName);
+        this.reqPath = new SimpleStringProperty(reqPath);
+        this.reqMethod = new SimpleStringProperty(reqMethod);
+        this.reqFnName = new SimpleStringProperty(reqFnName);
+        this.reqDescription = new SimpleStringProperty(reqDescription);
     }
 
     public String getReqName() {
@@ -66,18 +68,6 @@ public class Request {
         this.reqMethod.set(reqMethod);
     }
 
-    public String getReqParams() {
-        return reqParams.get();
-    }
-
-    public StringProperty reqParamsProperty() {
-        return reqParams;
-    }
-
-    public void setReqParams(String reqParams) {
-        this.reqParams.set(reqParams);
-    }
-
     public String getReqFnName() {
         return reqFnName.get();
     }
@@ -100,5 +90,13 @@ public class Request {
 
     public void setReqDescription(String reqDescription) {
         this.reqDescription.set(reqDescription);
+    }
+
+    public List<RequestParam> getRequestParamList() {
+        return requestParamList;
+    }
+
+    public void setRequestParamList(List<RequestParam> requestParamList) {
+        this.requestParamList = requestParamList;
     }
 }
