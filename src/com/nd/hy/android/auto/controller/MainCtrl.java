@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -54,12 +53,12 @@ public class MainCtrl extends BaseCtrl {
     public void showHttpList(List<HttpInfo> httpInfoList) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/layout_http_list.fxml"));
+            loader.setLocation(MainApp.class.getResource("view/layout_http_info_list.fxml"));
             Pane pane = loader.load();
 
             rootPane.setCenter(pane);
 
-            HttpListCtrl controller = loader.getController();
+            HttpInfoListCtrl controller = loader.getController();
             controller.setMainApp(mainApp);
             controller.fillTabelView(httpInfoList);
 

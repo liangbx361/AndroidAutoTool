@@ -1,30 +1,33 @@
 package com.nd.hy.android.auto.controller;
 
 import com.nd.hy.android.auto.MainApp;
-import com.nd.hy.android.auto.define.HttpFields;
-import com.nd.hy.android.auto.maker.CodeProducer;
 import com.nd.hy.android.auto.model.*;
 import com.nd.hy.android.auto.view.CustDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
  * Author liangbx
  * Date 2015/9/2
  */
-public class HttpListCtrl extends BaseCtrl implements Initializable{
+public class HttpInfoListCtrl extends BaseCtrl implements Initializable{
 
     @FXML
     private TableView<HttpInfo> tableView;
@@ -55,7 +58,7 @@ public class HttpListCtrl extends BaseCtrl implements Initializable{
         genCheckColumn.setCellFactory(CheckBoxTableCell.forTableColumn(genCheckColumn));
 
         tableView.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showDetail(newValue)
+                (observable, oldValue, newValue) -> editHttpInfo(newValue)
         );
 
         if(null != MainApp.project.getBaseModel()) {
@@ -73,8 +76,32 @@ public class HttpListCtrl extends BaseCtrl implements Initializable{
         tableView.setItems(observableList);
     }
 
-    private void showDetail(HttpInfo httpInfo) {
-        System.out.println("showDetail");
+    /**
+     * 进入修改HttpInfo
+     * @param httpInfo
+     */
+    private void editHttpInfo(HttpInfo httpInfo) {
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/layout_edit_http_info.fxml"));
+            Parent dialog = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("编辑Http信息");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(mainApp.getPrimaryStage());
+            dialogStage.getIcons().add(new Image("file:resources/images/edit.png"));
+            Scene scene = new Scene(dialog);
+            dialogStage.setScene(scene);
+
+            EditHttpInfoCtrl<HttpInfo> ctrl = loader.getController();
+            ctrl.setStage(dialogStage);
+            ctrl.showModel(httpInfo);
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
