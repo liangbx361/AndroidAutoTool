@@ -50,4 +50,10 @@ public class HttpInfo {
     public void setGenFlag(boolean genFlag) {
         this.genFlag.set(genFlag);
     }
+
+    public HttpInfo copy() {
+        HttpInfo httpInfo = new HttpInfo();
+
+        return httpInfo;
+    }
 }

@@ -26,7 +26,7 @@ public class EditHttpInfoCtrl<HttpInfo> extends BaseController<HttpInfo> impleme
     @FXML
     private TextField requestPathTf;
     @FXML
-    private TableView paramsTv;
+    private TableView<RequestParam> paramsTv;
     @FXML
     private TableColumn<RequestParam, String> pUseTypeTc;
     @FXML

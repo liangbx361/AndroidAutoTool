@@ -88,4 +88,13 @@ public class RequestParam {
     public void setNameForFn(String nameForFn) {
         this.nameForFn.set(nameForFn);
     }
+
+    public RequestParam copy() {
+        RequestParam newReqParam = new RequestParam();
+        newReqParam.setTypeForUrl(getTypeForUrl()+"");
+        newReqParam.setDataType(getDataType()+"");
+        newReqParam.setNameForFn(getNameForFn()+"");
+        newReqParam.setNameForUrl(getNameForUrl()+"");
+        return newReqParam;
+    };
 }

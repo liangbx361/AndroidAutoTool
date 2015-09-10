@@ -70,6 +70,7 @@ public class PostmanParser {
                 String[] params = query.split("&");
                 for(int i=0; i<params.length; i++) {
                     RequestParam reqParam = new RequestParam();
+                    paramList.add(reqParam);
 
                     String name = params[i].substring(0, params[i].indexOf("="));
                     String value = params[i].substring(params[i].indexOf("=")+1);

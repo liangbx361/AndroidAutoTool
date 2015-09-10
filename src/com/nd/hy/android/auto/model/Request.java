@@ -3,6 +3,7 @@ package com.nd.hy.android.auto.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,5 +99,21 @@ public class Request {
 
     public void setRequestParamList(List<RequestParam> requestParamList) {
         this.requestParamList = requestParamList;
+    }
+
+    public Request copy() {
+        Request request = new Request();
+        request.setReqName(getReqName() + "");
+        request.setReqPath(getReqPath() + "");
+        request.setReqMethod(getReqMethod() + "");
+        request.setReqFnName(getReqMethod() + "");
+        request.setReqDescription(getReqDescription() + "");
+
+        List<RequestParam> newReqParam = new ArrayList<>();
+        request.setRequestParamList(newReqParam);
+        for(RequestParam requestParam : requestParamList) {
+            newReqParam.add(requestParam.copy());
+        }
+        return request;
     }
 }
