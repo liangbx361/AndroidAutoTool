@@ -1,7 +1,10 @@
 package com.nd.hy.android.auto.controller;
 
 import com.nd.hy.android.auto.MainApp;
-import com.nd.hy.android.auto.model.*;
+import com.nd.hy.android.auto.maker.CodeProducer;
+import com.nd.hy.android.auto.model.HttpInfo;
+import com.nd.hy.android.auto.util.BaseModelUtil;
+import com.nd.hy.android.auto.util.HttpInfoUtil;
 import com.nd.hy.android.auto.view.CustDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -94,7 +97,7 @@ public class HttpInfoListCtrl extends BaseCtrl implements Initializable{
             Scene scene = new Scene(dialog);
             dialogStage.setScene(scene);
 
-            EditHttpInfoCtrl<HttpInfo> ctrl = loader.getController();
+            EditHttpInfoCtrl ctrl = loader.getController();
             ctrl.setStage(dialogStage);
             ctrl.showModel(httpInfo);
 
@@ -109,52 +112,25 @@ public class HttpInfoListCtrl extends BaseCtrl implements Initializable{
      */
     @FXML
     private void genCode() {
-//        CodeProducer.getInstance().produceHttpCode(httpInfoList);
+//        CodeProducer.getInstance().produceHttpCode(new HttpInfoUtil().beanToMap(httpInfoList));
+        CodeProducer.getInstance().produceHttpCode1(httpInfoList);
     }
 
     /**
      * 如果数据最外层是通用的，则提取最外层作为BasedModel
      */
     @FXML
-    private void handlerBaseModel() {
-        if(null != MainApp.project.getBaseModel() || findBaseModel()) {
+    public void handlerBaseModel() {
+        if(httpInfoList.size() < 0) {
+            return;
+        }
+
+        if(null != MainApp.project.getBaseModel() || null != BaseModelUtil.findBaseModel(httpInfoList)) {
             CustDialog.showCommonDialog(mainApp.getPrimaryStage(), "提取BaseModel", null,
                     CommonOptCtrl.OptType.EDIT_BASE_MODEL, MainApp.project);
         } else {
             CustDialog.showError("无法找到可提取的BaseModel");
         }
-    }
-
-    /**
-     * 查换BaseModel
-     * 提取最外层相同的字段作为BasedModel
-     * FIXME 目前只支持整层做为BasedModel，后续可以优化为支持同级部分字段提取BaseModel
-     */
-    private boolean findBaseModel() {
-        boolean isFind = true;
-        Model firstModel = httpInfoList.get(0).getResponse().getModel();
-        for(int i=1; i<httpInfoList.size(); i++) {
-            Model itemModel = httpInfoList.get(i).getResponse().getModel();
-            if(firstModel.getModelFieldList().size() != itemModel.getModelFieldList().size()) {
-                isFind = false;
-                break;
-            }
-            for(int j=0; j<firstModel.getModelFieldList().size(); j++) {
-                if(!firstModel.getModelFieldList().get(j).equals(itemModel.getModelFieldList().get(j))) {
-                    isFind = false;
-                    break;
-                }
-            }
-        }
-
-        if(isFind) {
-            Model baseModel = firstModel.copy();
-            baseModel.setModelName("BaseModel");
-            MainApp.project.setBaseModel(baseModel);
-        }
-
-        return isFind;
-
     }
 
     /**

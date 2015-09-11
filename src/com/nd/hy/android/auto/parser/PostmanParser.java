@@ -42,9 +42,8 @@ public class PostmanParser {
             httpInfo.setRequest(request);
 
             //响应
-            Response response = getResponse(pRequest.responses);
+            Response response = getResponse(pRequest.name, pRequest.responses);
             httpInfo.setResponse(response);
-            response.getModel().setModelName(pRequest.name);
         }
         return httpInfoList;
     }
@@ -87,12 +86,12 @@ public class PostmanParser {
         return paramList;
     }
 
-    private Response getResponse(List<Postman.Response> responses) {
+    private Response getResponse(String reqName, List<Postman.Response> responses) {
         Response response = new Response();
         for(Postman.Response pResponse : responses) {
             if(null != pResponse.text && !"".equals(pResponse.text)) {
                 ResponseParser respParser = new JsonRespParser();
-                Model model = respParser.getModel(pResponse.text);
+                Model model = respParser.getModel(reqName, pResponse.text);
                 response.setModel(model);
                 break;
             }

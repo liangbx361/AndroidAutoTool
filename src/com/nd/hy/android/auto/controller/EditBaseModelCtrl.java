@@ -3,29 +3,27 @@ package com.nd.hy.android.auto.controller;
 import com.nd.hy.android.auto.MainApp;
 import com.nd.hy.android.auto.model.Model;
 import com.nd.hy.android.auto.model.ModelField;
+import com.nd.hy.android.auto.util.BaseModelUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Author liangbx
- * Date 2015/9/7
+ * Date 2015/9/11
  */
-public class BaseModelCtrl implements Initializable, CommonOptCtrl.OptListener {
+public class EditBaseModelCtrl extends BaseController<Model> implements CommonOptCtrl.OptListener {
 
     @FXML
     private TextField baseModelName;
@@ -38,15 +36,7 @@ public class BaseModelCtrl implements Initializable, CommonOptCtrl.OptListener {
     @FXML
     private TableColumn<ModelField, String> genFieldName;
 
-    private Model baseModel;
-
-    private Stage stage;
-
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        initView();
-    }
-
     protected void initView() {
         dataType.setCellValueFactory(cellData -> cellData.getValue().dataTypeProperty());
         respFieldName.setCellValueFactory(cellData -> cellData.getValue().respFieldNameProperty());
@@ -57,28 +47,30 @@ public class BaseModelCtrl implements Initializable, CommonOptCtrl.OptListener {
         );
     }
 
-    public void fillTable(Model baseModel) {
-        this.baseModel = baseModel;
-        baseModelName.textProperty().bindBidirectional(baseModel.modelNameProperty());
+    @Override
+    protected void fillView(Model model) {
+        baseModelName.textProperty().bindBidirectional(getModel().modelNameProperty());
 
         ObservableList<ModelField> observableList = FXCollections.observableArrayList();
-        observableList.addAll(baseModel.getModelFieldList());
+        observableList.addAll(getModel().getModelFieldList());
 
         modelFieldsTable.setItems(observableList);
     }
 
+    /**
+     * 显示编辑框进行编辑
+     * @param newValue
+     */
     public void showEditDialog(ModelField newValue) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/dialog_edit_model_field.fxml"));
             Parent dialog = loader.load();
 
-
-            // Create the dialog Stage.
             Stage dialogStage = new Stage();
             dialogStage.setTitle("编辑字段");
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(stage);
+            dialogStage.initOwner(getStage());
             dialogStage.getIcons().add(new Image("file:resources/images/edit.png"));
             Scene scene = new Scene(dialog);
             dialogStage.setScene(scene);
@@ -87,7 +79,6 @@ public class BaseModelCtrl implements Initializable, CommonOptCtrl.OptListener {
             editModelFieldCtrl.setDialogStage(dialogStage);
             editModelFieldCtrl.initData(newValue);
 
-            // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
 
         } catch (IOException e) {
@@ -96,17 +87,18 @@ public class BaseModelCtrl implements Initializable, CommonOptCtrl.OptListener {
     }
 
     @Override
-    public void handlerOk() {
+    protected Model copyModel() {
+        return getModel().copy();
+    }
 
+
+    @Override
+    public void handlerOk() {
+        new BaseModelUtil().updateModels(getModel(), MainApp.project.getHttpInfoList());
     }
 
     @Override
     public void handlerCancel() {
 
-    }
-
-    @Override
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 }

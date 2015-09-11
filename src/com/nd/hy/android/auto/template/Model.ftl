@@ -3,27 +3,31 @@ package ${PackageName}.model;
 <#list ImportList as import>
 import ${import}
 </#list>
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ${ModelName} {
 
-<#list FieldsList as fields>
-    <#if (fields.column)??>
-    @Column(name = "${fields.name}")
+<#list FieldList as field>
+    <#if (field.column)??>
+    @Column(name = "${field.genName}")
     </#if>
-    <#if (fields.type)?? && (fields.name)??>
-    private ${fields.type} ${fields.name};
+    <#if (field.respFieldName)??>
+    @JsonProperty("${field.respFieldName}")
+    </#if>
+    <#if (field.dataType)?? && (field.name)??>
+    private ${field.dataType} ${field.name};
     </#if>
 </#list>
 
-<#list FieldsList as fields>
-    <#if (fields.type)?? && (fields.name)?? && (fields.fnName)??>
-    public void set${fields.fnName}(${fields.type} ${fields.name}) {
-        this.${fields.name} = ${fields.name};
+<#list FieldList as field>
+    <#if (field.dataType)?? && (field.name)?? && (field.fnName)??>
+    public void set${field.fnName}(${field.dataType} ${field.name}) {
+        this.${field.name} = ${field.name};
     }
     </#if>
-    <#if (fields.type)?? && (fields.name)?? && (fields.fnName)??>
-    public ${fields.type} get${fields.fnName}() {
-        return ${fields.name};
+    <#if (field.dataType)?? && (field.name)?? && (field.fnName)??>
+    public ${field.dataType} get${field.fnName}() {
+        return ${field.name};
     }
     </#if>
 </#list>

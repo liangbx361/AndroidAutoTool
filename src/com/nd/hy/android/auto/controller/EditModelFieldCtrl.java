@@ -2,6 +2,7 @@ package com.nd.hy.android.auto.controller;
 
 import com.nd.hy.android.auto.define.DataType;
 import com.nd.hy.android.auto.model.ModelField;
+import com.nd.hy.android.auto.util.DefineUtil;
 import com.nd.hy.android.auto.view.CustDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,14 +39,7 @@ public class EditModelFieldCtrl extends BaseCtrl {
     @Override
     protected void initView() {
         ObservableList<String> dataTypeList = FXCollections.observableArrayList();
-        Field[] fields = DataType.class.getFields();
-        for(int i=0; i<fields.length; i++) {
-            try {
-                dataTypeList.add(fields[i].get(fields[i].getName()).toString());
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
+        dataTypeList.addAll(DefineUtil.getDefineList(DataType.class));
         dataTypeCb.setItems(dataTypeList);
     }
 

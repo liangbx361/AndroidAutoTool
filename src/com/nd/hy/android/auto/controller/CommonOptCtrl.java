@@ -109,10 +109,10 @@ public class CommonOptCtrl implements Initializable {
             loader.setLocation(MainApp.class.getResource("view/layout_edit_base_model.fxml"));
             Node node = loader.load();
 
-            BaseModelCtrl controller = loader.getController();
-            controller.fillTable(MainApp.project.getBaseModel());
-            listener = controller;
-            listener.setStage(stage);
+            EditBaseModelCtrl controller = loader.getController();
+            controller.setStage(stage);
+            controller.showModel(MainApp.project.getBaseModel());
+            setListener(controller);
 
             rootPane.setCenter(node);
 

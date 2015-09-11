@@ -20,6 +20,8 @@ public class Model {
 
     private List<ModelField> modelFieldList;
 
+    private boolean isBaseModel;
+
     public Model() {
         this(null);
     }
@@ -54,6 +56,14 @@ public class Model {
 
     public void setModelFieldList(List<ModelField> modelFieldList) {
         this.modelFieldList = modelFieldList;
+    }
+
+    public boolean isBaseModel() {
+        return isBaseModel;
+    }
+
+    public void setIsBaseModel(boolean isBaseModel) {
+        this.isBaseModel = isBaseModel;
     }
 
     public Model copy() {

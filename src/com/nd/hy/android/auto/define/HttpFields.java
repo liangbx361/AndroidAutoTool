@@ -36,6 +36,14 @@ public interface HttpFields {
      */
     String REQUEST_PARAMS = "RequestParams";
 
+    String REQUEST_PARAMS_TYPE_FOR_URL = "typeForUrl";
+
+    String REQUEST_PARAMS_NAME_FOR_FN = "nameForFn";
+
+    String REQUEST_PARAMS_NAME_FOR_URL = "nameForUrl";
+
+    String REQUEST_PARAMS_DATA_TYPE = "dataType";
+
     /**
      * 请求方法名称
      */

@@ -4,50 +4,50 @@ package com.nd.hy.android.auto.define;
  * Author liangbx
  * Date 2015/9/6
  */
-public interface TmplRestApiFields {
+public interface TmplRestApi {
 
     /**
-     * API Ãû³Æ
+     * API ï¿½ï¿½ï¿½
      */
     String API_PROTOCOL_NAME = "ApiProtocolName";
 
     /**
-     * API ÁÐ±í
+     * API ï¿½Ð±ï¿½
      */
     String API_LIST = "RestApiList";
 
     /**
-     * ÇëÇó·½·¨
+     * ï¿½ï¿½ï¿½ó·½·ï¿½
      */
     String REQUEST_METHOD = "RequestMethod";
 
     /**
-     * ÇëÇóÂ·¾¶
+     * ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
      */
     String REQUEST_PATH = "RequestPath";
 
     /**
-     * ÇëÇóº¯ÊýÃû³Æ
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     String REQUEST_FN_NAME = "RequestFnName";
 
     /**
-     * ÇëÇó²ÎÊý
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     String REQUEST_PARAMS = "RequestParams";
 
     /**
-     * ²ÎÊýÉùÃ÷ÀàÐÍ
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     String PARAMS_USE_TYPE = "UseType";
 
     /**
-     * ²ÎÊýÊý¾ÝÀàÐÍ
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     String PARAMS_DATA_TYPE = "Type";
 
     /**
-     * ²ÎÊýÃû³Æ
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     String PARAMS_NAME = "Name";
 

@@ -15,8 +15,8 @@ public interface ResponseParser {
 
     /**
      * 将body转换成Model
-     * @param response
+     * @param
      * @return
      */
-    Model getModel(String body);
+    Model getModel(String reqName, String body);
 }

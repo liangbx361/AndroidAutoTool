@@ -12,7 +12,9 @@ public class ModelField {
     private final StringProperty dataType;
     private final StringProperty respFieldName;
     private final StringProperty genFieldName;
+    private boolean isBaseField;
     private Model subModel;
+
 
     public ModelField() {
         this(null, null, null);
@@ -60,6 +62,14 @@ public class ModelField {
         this.genFieldName.set(genFieldName);
     }
 
+    public boolean isBaseField() {
+        return isBaseField;
+    }
+
+    public void setIsBaseField(boolean isBaseField) {
+        this.isBaseField = isBaseField;
+    }
+
     public Model getSubModel() {
         return subModel;
     }
@@ -82,9 +92,10 @@ public class ModelField {
     public ModelField copy() {
         ModelField modelField = new ModelField(getDataType() + "", getRespFieldName() + "", getGenFieldName() + "");
         if(null != getSubModel()) {
-            setSubModel(getSubModel().copy());
+            modelField.setSubModel(getSubModel().copy());
         }
 
         return modelField;
     };
+
 }

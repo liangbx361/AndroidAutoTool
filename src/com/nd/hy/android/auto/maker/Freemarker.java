@@ -30,11 +30,11 @@ public class Freemarker {
         init();
     }
 
-    //³õÊ¼»¯¹¤×÷
+    //åˆå§‹åŒ–å·¥ä½œ
     public void init(){
         cfg = new Configuration();
         cfg.setDefaultEncoding("utf-8");
-        //ÉèÖÃÄ£°åÎÄ¼şÎ»ÖÃ
+        //è®¾ç½®æ¨¡æ¿æ–‡ä»¶ä½ç½®
         try {
             cfg.setDirectoryForTemplateLoading(new File(PathConfig.TEMPLATE_PATH));
         } catch (IOException e) {
@@ -43,7 +43,7 @@ public class Freemarker {
     }
 
     /**
-     * ÉèÖÃÄ£°åµÄ¼ÓÔØÄ¿Â¼
+     * è®¾ç½®æ¨¡æ¿çš„åŠ è½½ç›®å½•
      * @param file
      * @throws IOException
      */
@@ -51,11 +51,11 @@ public class Freemarker {
         cfg.setDirectoryForTemplateLoading(file);
     }
 
-    //Ä£°å + Êı¾İÄ£ĞÍ = Êä³ö
+    //æ¨¡æ¿ + æ•°æ®æ¨¡å‹ = è¾“å‡º
     public void process(Map<String, Object> rootMap, String templete, File file) throws Exception {
-        //Ê¹ÓÃConfigurationÊµÀı¼ÓÔØÖ¸¶¨Ä£°å
+        //ä½¿ç”¨Configurationå®ä¾‹åŠ è½½æŒ‡å®šæ¨¡æ¿
         Template template = cfg.getTemplate(templete);
-        //ºÏ²¢´¦Àí£¨Ä£°å + Êı¾İÄ£ĞÍ£©
+        //åˆå¹¶å¤„ç†ï¼ˆæ¨¡æ¿ + æ•°æ®æ¨¡å‹ï¼‰
         template.process(rootMap, new FileWriter(file));
     }
 }

@@ -27,7 +27,7 @@
                </padding></HBox>
             <HBox>
                <children>
-                  <Label fx:id="requestMethodFt" contentDisplay="CENTER" prefHeight="37.0" prefWidth="94.0" text="请求方法" textOverrun="CLIP">
+                  <Label fx:id="requestMethodFt" contentDisplay="CENTER" prefHeight="37.0" prefWidth="94.0" text="请求方式" textOverrun="CLIP">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -73,11 +73,11 @@
       </VBox>
    </left>
    <center>
-      <TreeTableView prefHeight="436.0" prefWidth="310.0" style="-fx-background-color: #1d1d1d;" BorderPane.alignment="CENTER">
+      <TreeTableView fx:id="modelTtv" prefHeight="436.0" prefWidth="310.0" style="-fx-background-color: #1d1d1d;" BorderPane.alignment="CENTER">
         <columns>
-          <TreeTableColumn prefWidth="116.0" text="数据类型" />
-          <TreeTableColumn prefWidth="115.0" text="字段名称" />
-            <TreeTableColumn prefWidth="114.0" text="变量名称" />
+          <TreeTableColumn fx:id="mDataTypeTtc" prefWidth="116.0" text="数据类型" />
+          <TreeTableColumn fx:id="mRespFieldNameTtc" prefWidth="115.0" text="字段名称" />
+            <TreeTableColumn fx:id="mGenFieldNameTtc" prefWidth="114.0" text="变量名称" />
         </columns>
          <BorderPane.margin>
             <Insets left="10.0" />

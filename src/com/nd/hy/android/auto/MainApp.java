@@ -1,9 +1,6 @@
 package com.nd.hy.android.auto;
 
-import com.nd.hy.android.auto.controller.BaseModelCtrl;
 import com.nd.hy.android.auto.controller.MainCtrl;
-import com.nd.hy.android.auto.define.DataType;
-import com.nd.hy.android.auto.model.ModelField;
 import com.nd.hy.android.auto.model.Project;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,9 +9,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author liangbx

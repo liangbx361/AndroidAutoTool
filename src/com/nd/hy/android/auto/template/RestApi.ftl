@@ -9,8 +9,8 @@ public interface ${ApiProtocolName} {
     <#list RestApiList as apiItem>
     @${apiItem.RequestMethod}("${apiItem.RequestPath}")
     ${apiItem.ModelName} ${apiItem.RequestFnName}(
-        <#list apiItem.RequestParams as params>
-            @${params.FieldsType}("${params.Name}") ${params.Type} ${params.Name},
+        <#list apiItem.RequestParams as param>
+            @${param.typeForUrl}("${param.nameForUrl}") ${param.dataType} ${param.nameForFn},
         </#list>
     );
 

@@ -9,8 +9,8 @@ import com.nd.hy.android.hermes.frame.action.Action;
 public class ${ActionName} extends Action<${ModelName}> {
 
 <#list DataList as data>
-    <#if (data.Type)?? && (data.Name)??>
-    private ${data.Type} ${data.Name};
+    <#if (data.dataType)?? && (data.nameForFn)??>
+    private ${data.dataType} ${data.nameForFn};
     </#if>
 </#list>
 
@@ -20,7 +20,7 @@ public class ${ActionName} extends Action<${ModelName}> {
     <#if (Params)?? >
     public ${ActionName} (${Params}) {
         <#list DataList as data>
-        this.${data.Name} = ${data.Name};
+        this.${data.nameForFn} = ${data.nameForFn};
         </#list>
     }
     </#if>

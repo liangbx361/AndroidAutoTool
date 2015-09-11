@@ -4,7 +4,7 @@ package com.nd.hy.android.auto.define;
  * Author liangbx
  * Date 2015/8/28
  */
-public interface TmplModelFields {
+public interface TmplModel {
 
     /**
      * Model 类名
@@ -14,17 +14,22 @@ public interface TmplModelFields {
     /**
      * 字段列表
      */
-    String FIELDS_LIST = "FieldsList";
+    String FIELD_LIST = "FieldList";
 
     /**
      * 字段数据类型
      */
-    String FIELDS_TYPE = "type";
+    String FIELD_TYPE = "dataType";
 
     /**
-     * 字段名称
+     * 生成字段名称
      */
-    String FIELDS_NAME = "name";
+    String FIELD_NAME = "name";
+
+    /**
+     * Http 响应中定义的名字
+     */
+    String FIELD_RESP_NAME = "respFieldName";
 
     /**
      * 子类
