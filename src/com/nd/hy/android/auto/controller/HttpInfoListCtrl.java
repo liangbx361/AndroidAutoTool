@@ -4,7 +4,6 @@ import com.nd.hy.android.auto.MainApp;
 import com.nd.hy.android.auto.maker.CodeProducer;
 import com.nd.hy.android.auto.model.HttpInfo;
 import com.nd.hy.android.auto.util.BaseModelUtil;
-import com.nd.hy.android.auto.util.HttpInfoUtil;
 import com.nd.hy.android.auto.view.CustDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -71,7 +70,7 @@ public class HttpInfoListCtrl extends BaseCtrl implements Initializable{
         }
     }
 
-    public void fillTabelView(List<HttpInfo> httpInfoList) {
+    public void fillTableView(List<HttpInfo> httpInfoList) {
         this.httpInfoList = httpInfoList;
         ObservableList<HttpInfo> observableList = FXCollections.observableArrayList();
         observableList.addAll(httpInfoList);
@@ -80,7 +79,7 @@ public class HttpInfoListCtrl extends BaseCtrl implements Initializable{
     }
 
     /**
-     * 进入修改HttpInfo
+     * 进入修改HttpInfo页面
      * @param httpInfo
      */
     private void editHttpInfo(HttpInfo httpInfo) {
@@ -111,9 +110,10 @@ public class HttpInfoListCtrl extends BaseCtrl implements Initializable{
      * 生成代码
      */
     @FXML
-    private void genCode() {
-//        CodeProducer.getInstance().produceHttpCode(new HttpInfoUtil().beanToMap(httpInfoList));
-        CodeProducer.getInstance().produceHttpCode1(httpInfoList);
+    public void genCode() {
+        if(CodeProducer.getInstance().produceHttpCode(httpInfoList)) {
+            CustDialog.showMessage(mainApp.getPrimaryStage(), "生成完成");
+        }
     }
 
     /**

@@ -7,6 +7,8 @@ import com.nd.hy.android.auto.model.Model;
 import com.nd.hy.android.auto.model.Response;
 import com.nd.hy.android.auto.parser.RequestMethod;
 import com.nd.hy.android.auto.util.HttpInfoUtil;
+import com.nd.hy.android.auto.view.CustDialog;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.*;
@@ -35,7 +37,9 @@ public class CodeProducer {
         return mCodeProducer;
     }
 
-    public void produceHttpCode1(List<HttpInfo> httpInfoList) {
+    public boolean produceHttpCode(List<HttpInfo> httpInfoList) {
+        boolean isComplete = true;
+
         Map<String, Object> baseInfo = new HashMap<>();
         HttpInfoUtil httpInfoUtil = new HttpInfoUtil();
 
@@ -95,10 +99,10 @@ public class CodeProducer {
 
         genRestApi(importList, apiList, baseInfo, genDir);
 
-        System.out.println("生成完成");
+        return isComplete;
     }
 
-    public void produceHttpCode(List<Map<String, Object>> httpInfoList) {
+    public void produceHttpCodeByMap(List<Map<String, Object>> httpInfoList) {
         Map<String, Object> baseInfo = new HashMap<>();
 
         String packageName = MainApp.project.getPackageName();

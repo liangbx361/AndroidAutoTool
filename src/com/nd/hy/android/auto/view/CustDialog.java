@@ -11,6 +11,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
 
 import java.io.IOException;
 
@@ -22,6 +24,15 @@ public class CustDialog {
 
     public static void showError(String message) {
         System.out.println(message);
+        Dialogs.create().showError();
+    }
+
+    public static void showMessage(Stage owner, String message) {
+        System.out.println(message);
+        Dialogs.create().showConfirm();
+        Dialog dialog = new Dialog(owner, "");
+        dialog.setContent(message);
+        dialog.show();
     }
 
     public static CommonOptCtrl showCommonDialog(Stage primaryStage, String title, String iconRes, CommonOptCtrl.OptType optType, Project project) {

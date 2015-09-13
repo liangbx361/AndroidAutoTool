@@ -60,7 +60,7 @@ public class MainCtrl extends BaseCtrl {
 
             HttpInfoListCtrl controller = loader.getController();
             controller.setMainApp(mainApp);
-            controller.fillTabelView(httpInfoList);
+            controller.fillTableView(httpInfoList);
 
         } catch (IOException e) {
             e.printStackTrace();
