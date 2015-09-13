@@ -6,6 +6,7 @@ package com.nd.hy.android.auto.define;
  */
 public interface RetrofitParams {
 
+    String PATH = "Path";
     String QUERY = "Query";
     String BODY = "Body";
     String FIELD = "Field";

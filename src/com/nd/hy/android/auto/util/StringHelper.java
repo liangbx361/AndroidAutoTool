@@ -22,5 +22,11 @@ public class StringHelper {
         return name;
     }
 
-
+    public static String getClassName(String name) {
+        if(name.contains("List<")) {
+            name = name.replace("List<", "");
+            name = name.replace(">", "");
+        }
+        return name;
+    }
 }

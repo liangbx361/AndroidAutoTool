@@ -1,9 +1,11 @@
 package com.nd.hy.android.auto.controller;
 
+import com.nd.hy.android.auto.define.BaseDataType;
 import com.nd.hy.android.auto.define.DataType;
 import com.nd.hy.android.auto.define.RetrofitParams;
 import com.nd.hy.android.auto.model.*;
 import com.nd.hy.android.auto.util.DefineUtil;
+import com.nd.hy.android.auto.util.StringHelper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -56,9 +58,10 @@ public class EditHttpInfoCtrl extends BaseController<HttpInfo> implements Initia
 
     @Override
     protected void initView() {
+        //请求参数 数据
         pUseTypeTc.setCellValueFactory(cellData -> cellData.getValue().typeForUrlProperty());
-        ObservableList<String> observableList = FXCollections.observableList(DefineUtil.getDefineList(RetrofitParams.class));
-        pUseTypeTc.setCellFactory(ChoiceBoxTableCell.forTableColumn(observableList));
+        pUseTypeTc.setCellFactory(ChoiceBoxTableCell.forTableColumn(FXCollections.observableList(
+                DefineUtil.getDefineList(RetrofitParams.class))));
         pUseTypeTc.setOnEditCommit(
                 t -> {
                     t.getTableView().getItems().get(t.getTablePosition().getRow()).setTypeForUrl(t.getNewValue());
@@ -67,18 +70,52 @@ public class EditHttpInfoCtrl extends BaseController<HttpInfo> implements Initia
         pUrlNameTc.setCellValueFactory(cellData -> cellData.getValue().nameForUrlProperty());
 
         pDataTypeTc.setCellValueFactory(cellData -> cellData.getValue().dataTypeProperty());
-        pDataTypeTc.setCellFactory(TextFieldTableCell.forTableColumn());
+        pDataTypeTc.setCellFactory(ChoiceBoxTableCell.forTableColumn(FXCollections.observableList(
+                DefineUtil.getDefineList(BaseDataType.class))));
         pDataTypeTc.setOnEditCommit(
                 t -> {
                     t.getTableView().getItems().get(t.getTablePosition().getRow()).setDataType(t.getNewValue());
                 }
         );
 
-        pValueNameTc.setCellValueFactory(cellData -> cellData.getValue().nameForUrlProperty());
+        pValueNameTc.setCellValueFactory(cellData -> cellData.getValue().nameForFnProperty());
         pValueNameTc.setCellFactory(TextFieldTableCell.forTableColumn());
         pValueNameTc.setOnEditCommit(
                 t -> {
                     t.getTableView().getItems().get(t.getTablePosition().getRow()).setNameForFn(t.getNewValue());
+                }
+        );
+
+        //Model 数据
+        mDataTypeTtc.setCellValueFactory(cellData -> cellData.getValue().getValue().dataTypeProperty());
+        mDataTypeTtc.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
+        mDataTypeTtc.setOnEditCommit(
+                t -> {
+                    //FIXME 需要判断哪些属于数据类型更改，哪些属于类名修改
+                    int row = t.getTreeTablePosition().getRow();
+
+                    if(row == 0) {
+                        //修改类名
+                        httpInfo.getResponse().getModel().setModelName(t.getNewValue());
+                    } else {
+                        ModelField modelField = t.getTreeTableView().getTreeItem(row).getValue();
+                        modelField.setDataType(t.getNewValue());
+                        if(null != modelField.getSubModel()) {
+                            modelField.getSubModel().setModelName(StringHelper.getClassName(t.getNewValue()));
+                        }
+                    }
+
+                }
+        );
+
+        mRespFieldNameTtc.setCellValueFactory(cellData -> cellData.getValue().getValue().respFieldNameProperty());
+
+        mGenFieldNameTtc.setCellValueFactory(cellData -> cellData.getValue().getValue().genFieldNameProperty());
+        mGenFieldNameTtc.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
+        mGenFieldNameTtc.setOnEditCommit(
+                t -> {
+                    t.getTreeTableView().getTreeItem(t.getTreeTablePosition().getRow()).getValue().
+                            setGenFieldName(t.getNewValue());
                 }
         );
     }
@@ -117,26 +154,6 @@ public class EditHttpInfoCtrl extends BaseController<HttpInfo> implements Initia
         TreeItem<ModelField> rootItem = new TreeItem<>(new ModelField(model.getModelName(), "", ""));
         rootItem.setExpanded(true);
         genTreeItem(rootItem, model);
-
-        mDataTypeTtc.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<ModelField, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<ModelField, String> param) {
-                return param.getValue().getValue().dataTypeProperty();
-            }
-        });
-
-//        mDataTypeTtc.setCellValueFactory(cellData -> cellData.getValue().getValue().dataTypeProperty());
-//        mDataTypeTtc.setCellValueFactory((TreeTableColumn.CellDataFeatures<ModelField, String> p) ->
-//            new ReadOnlyStringWrapper(p.getValue().getValue().getDataType()));
-        mDataTypeTtc.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
-
-        mRespFieldNameTtc.setCellValueFactory((TreeTableColumn.CellDataFeatures<ModelField, String> p) ->
-                new ReadOnlyStringWrapper(p.getValue().getValue().getRespFieldName()));
-        mRespFieldNameTtc.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
-
-        mGenFieldNameTtc.setCellValueFactory((TreeTableColumn.CellDataFeatures<ModelField, String> p) ->
-                new ReadOnlyStringWrapper(p.getValue().getValue().getGenFieldName()));
-        mGenFieldNameTtc.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
 
         modelTtv.setRoot(rootItem);
         modelTtv.setEditable(true);
