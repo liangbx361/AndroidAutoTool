@@ -46,7 +46,7 @@ public class CodeProducer {
         String packageName = MainApp.project.getPackageName();
         baseInfo.put("PackageName", packageName);
 
-        File genDir = new File("gen/" + packageName.replace(".", "/"));
+        File genDir = new File(MainApp.project.getGenPath()+ "/" + packageName.replace(".", "/"));
         if(!genDir.exists()) {
             genDir.mkdirs();
         }

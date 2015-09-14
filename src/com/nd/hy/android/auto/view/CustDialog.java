@@ -7,12 +7,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
+import org.controlsfx.dialog.CommandLinksDialog;
+
 
 import java.io.IOException;
 
@@ -24,15 +25,15 @@ public class CustDialog {
 
     public static void showError(String message) {
         System.out.println(message);
-        Dialogs.create().showError();
+//        Dialogs.create().showError();
     }
 
     public static void showMessage(Stage owner, String message) {
         System.out.println(message);
-        Dialogs.create().showConfirm();
-        Dialog dialog = new Dialog(owner, "");
-        dialog.setContent(message);
-        dialog.show();
+        Dialog dialog = new CommandLinksDialog();
+        dialog.setTitle("信息");
+        dialog.setContentText(message);
+        dialog.showAndWait();
     }
 
     public static CommonOptCtrl showCommonDialog(Stage primaryStage, String title, String iconRes, CommonOptCtrl.OptType optType, Project project) {
