@@ -22,6 +22,8 @@ public class Model {
 
     private boolean isBaseModel;
 
+    private boolean listFlag = false;
+
     public Model() {
         this(null);
     }
@@ -64,6 +66,14 @@ public class Model {
 
     public void setIsBaseModel(boolean isBaseModel) {
         this.isBaseModel = isBaseModel;
+    }
+
+    public boolean isListFlag() {
+        return listFlag;
+    }
+
+    public void setListFlag(boolean listFlag) {
+        this.listFlag = listFlag;
     }
 
     public Model copy() {

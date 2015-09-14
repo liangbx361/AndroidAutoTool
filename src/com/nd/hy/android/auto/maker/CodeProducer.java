@@ -73,7 +73,16 @@ public class CodeProducer {
 
             Map<String, Object> apiInfo = new HashMap<>();
             apiList.add(apiInfo);
-            apiInfo.put(TmplModel.MODEL_NAME, baseInfo.get(TmplModel.MODEL_NAME));
+            String modelName = (String) baseInfo.get(TmplModel.MODEL_NAME);
+            Model baseModel = MainApp.project.getBaseModel();
+            if (null != baseModel) {
+                if(!model.isListFlag()) {
+                    modelName = baseModel.getModelName() + "<" + modelName + ">";
+                } else {
+                    modelName = baseModel.getModelName() + "<List<" + modelName + ">>";
+                }
+            }
+            apiInfo.put(TmplModel.MODEL_NAME, modelName);
             apiInfo.put(HttpFields.REQUEST_METHOD, reqMap.get(HttpFields.REQUEST_METHOD));
             apiInfo.put(HttpFields.REQUEST_PATH, reqMap.get(HttpFields.REQUEST_PATH));
             apiInfo.put(HttpFields.REQUEST_PARAMS, reqMap.get(HttpFields.REQUEST_PARAMS));

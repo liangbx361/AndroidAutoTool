@@ -91,6 +91,7 @@ public class JsonRespParser implements ResponseParser {
 
                             //需要再创建一个Model
                             Model subModel = new Model();
+                            subModel.setListFlag(true);
                             modelField.setSubModel(subModel);
 
 

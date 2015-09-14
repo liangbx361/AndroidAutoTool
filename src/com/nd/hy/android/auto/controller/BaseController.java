@@ -16,6 +16,7 @@ public abstract class BaseController<T> implements Initializable {
 
     private T model;
     private T backModel;
+    private Object parent;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,4 +59,11 @@ public abstract class BaseController<T> implements Initializable {
         this.backModel = backModel;
     }
 
+    public Object getParent() {
+        return parent;
+    }
+
+    public void setParent(Object parent) {
+        this.parent = parent;
+    }
 }

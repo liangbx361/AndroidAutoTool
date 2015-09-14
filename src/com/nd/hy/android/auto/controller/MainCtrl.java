@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -61,6 +62,12 @@ public class MainCtrl extends BaseCtrl {
     @FXML
     public void setPackageName() {
         //FIXME 需要使用input dialog 进行输入
+        TextInputDialog dialog = new TextInputDialog(MainApp.project.getPackageName());
+        dialog.setTitle("请设置项目包名");
+        dialog.setContentText("包名：");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(name -> MainApp.project.setPackageName(name));
     }
 
     /**
