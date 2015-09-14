@@ -73,14 +73,22 @@ public class HttpInfoUtil {
     public List<Map<String, String>> getReqParams(List<RequestParam> paramList) {
         List<Map<String, String>> mapList = new ArrayList<>();
 
-        for(RequestParam reqParam : paramList) {
+        for(int i=0; i<paramList.size(); i++) {
+            RequestParam reqParam = paramList.get(i);
+
             Map<String, String> map = new HashMap<>();
             mapList.add(map);
 
             map.put(HttpFields.REQUEST_PARAMS_TYPE_FOR_URL, reqParam.getTypeForUrl());
-            map.put(HttpFields.REQUEST_PARAMS_NAME_FOR_FN, reqParam.getNameForFn());
             map.put(HttpFields.REQUEST_PARAMS_NAME_FOR_URL, reqParam.getNameForUrl());
             map.put(HttpFields.REQUEST_PARAMS_DATA_TYPE, reqParam.getDataType());
+            map.put(HttpFields.REQUEST_PARAMS_NAME_FOR_FN, reqParam.getNameForFn());
+
+            if(i == paramList.size()-1) {
+                map.put(HttpFields.REQUEST_PARAMS_COMMA, "");
+            } else {
+                map.put(HttpFields.REQUEST_PARAMS_COMMA, ",");
+            }
         }
 
         return mapList;

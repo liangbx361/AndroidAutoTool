@@ -1,6 +1,8 @@
 package com.nd.hy.android.auto;
 
+import com.nd.hy.android.auto.config.PathConfig;
 import com.nd.hy.android.auto.controller.MainCtrl;
+import com.nd.hy.android.auto.maker.Freemarker;
 import com.nd.hy.android.auto.model.Project;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -35,6 +38,12 @@ public class MainApp extends Application {
         //FIXME 需要读取工程的信息，进行初始化。目前进行写死
         project.setPackageName("com.nd.hy.android.auto");
         project.setGenPath("/gen");
+
+        try {
+            Freemarker.getInstance().setDirectoryForTemplateLoading(new File(PathConfig.TEMPLATE_PATH));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void initRootLayout() {

@@ -44,6 +44,8 @@ public interface HttpFields {
 
     String REQUEST_PARAMS_DATA_TYPE = "dataType";
 
+    String REQUEST_PARAMS_COMMA = "comma";
+
     /**
      * 请求方法名称
      */

@@ -54,6 +54,7 @@ public class CodeProducer {
         //生成BaseModel
         if(null != MainApp.project.getBaseModel()) {
             Map<String, Object> baseMap = httpInfoUtil.getModelMap(MainApp.project.getBaseModel());
+            baseMap.put(TmplModel.BASE_MODEL_FLAG, "true");
             genModel(baseMap, baseInfo, genDir);
         }
 
@@ -69,17 +70,25 @@ public class CodeProducer {
 
             Map<String, Object> reqMap = httpInfoUtil.getReqMap(httpInfo.getRequest());
             baseInfo.put(TmplModel.MODEL_NAME, model.getModelName());
-            genAction((List<Map<String, Object>>) reqMap.get(HttpFields.REQUEST_PARAMS), baseInfo, genDir);
+            Set<String> actImportList = new HashSet<>();
+            genAction(actImportList, (List<Map<String, Object>>) reqMap.get(HttpFields.REQUEST_PARAMS), baseInfo, genDir);
 
             Map<String, Object> apiInfo = new HashMap<>();
             apiList.add(apiInfo);
             String modelName = (String) baseInfo.get(TmplModel.MODEL_NAME);
             Model baseModel = MainApp.project.getBaseModel();
+            importList.add(JavaImport.LIST);
+            if(null != baseModel) {
+                importList.add(packageName + ".model." + baseModel.getModelName());
+            }
+            importList.add(packageName + ".model." + modelName);
+
             if (null != baseModel) {
                 if(!model.isListFlag()) {
                     modelName = baseModel.getModelName() + "<" + modelName + ">";
                 } else {
                     modelName = baseModel.getModelName() + "<List<" + modelName + ">>";
+
                 }
             }
             apiInfo.put(TmplModel.MODEL_NAME, modelName);
@@ -111,68 +120,6 @@ public class CodeProducer {
         return isComplete;
     }
 
-    public void produceHttpCodeByMap(List<Map<String, Object>> httpInfoList) {
-        Map<String, Object> baseInfo = new HashMap<>();
-
-        String packageName = MainApp.project.getPackageName();
-        baseInfo.put("PackageName", packageName);
-
-        File genDir = new File("gen/" + packageName.replace(".", "/"));
-        if(!genDir.exists()) {
-            genDir.mkdirs();
-        }
-
-        List<Map<String, Object>> apiList = new ArrayList<>();
-        Set<String> importList = new HashSet<>();
-        for(Map<String, Object> httpInfo : httpInfoList) {
-
-            Map<String, Object> request = (Map<String, Object>) httpInfo.get(HttpFields.REQUEST);
-            Map<String, Object> response = (Map<String, Object>) httpInfo.get(HttpFields.RESPONSE);
-
-            baseInfo.put(TmplModel.MODEL_NAME, request.get(HttpFields.REQUEST_NAME));
-
-            if(null != MainApp.project.getBaseModel()) {
-                Map<String, Object> baseMap = new HttpInfoUtil().getModelMap(MainApp.project.getBaseModel());
-                genModel(baseMap, baseInfo, genDir);
-            }
-
-            Map<String, Object> modelMap = (Map<String, Object>) response.get(HttpFields.RESPONSE_BODY);
-            genModel(modelMap, baseInfo, genDir);
-
-            List<Map<String, Object>> reqParamsList = (List<Map<String, Object>>) request.get(HttpFields.REQUEST_PARAMS);
-            genAction(reqParamsList, baseInfo, genDir);
-
-            Map<String, Object> apiInfo = new HashMap<>();
-            apiList.add(apiInfo);
-            apiInfo.put(TmplModel.MODEL_NAME, baseInfo.get(TmplModel.MODEL_NAME));
-            apiInfo.put(HttpFields.REQUEST_METHOD, request.get(HttpFields.REQUEST_METHOD));
-            apiInfo.put(HttpFields.REQUEST_PATH, request.get(HttpFields.REQUEST_PATH));
-            apiInfo.put(HttpFields.REQUEST_PARAMS, request.get(HttpFields.REQUEST_PARAMS));
-            apiInfo.put(HttpFields.REQUEST_FN_NAME, request.get(HttpFields.REQUEST_FN_NAME));
-
-            //获取生成API相关的Import
-            String importPath = getRetrofitImports(request.get(HttpFields.REQUEST_METHOD).toString());
-            if(importPath != null && !importPath.equals("")) {
-                importList.add(importPath);
-            }
-
-            String params = request.get(HttpFields.REQUEST_PARAMS).toString();
-            if(params != null && !params.equals("")) {
-                importList.add(RetrofitImport.QUERY);
-            }
-
-            StringBuilder modelPath = new StringBuilder();
-            modelPath.append(baseInfo.get("PackageName").toString());
-            modelPath.append(".model.");
-            modelPath.append(baseInfo.get(TmplModel.MODEL_NAME).toString());
-            importList.add(modelPath.toString());
-        }
-
-        genRestApi(importList, apiList, baseInfo, genDir);
-
-        System.out.println("生成完成");
-    }
-
     public String getRetrofitImports(String requestMethod) {
         String importPath = null;
         if(RequestMethod.GET.equals(requestMethod)) {
@@ -197,18 +144,24 @@ public class CodeProducer {
             modelDir.mkdirs();
         }
 
+        String modelName = model.get(TmplModel.MODEL_NAME).toString();
+
         Map<String, Object> map = new HashMap<>(baseInfo);
-        map.put(TmplModel.MODEL_NAME, model.get(TmplModel.MODEL_NAME));
+        if(!model.containsKey(TmplModel.BASE_MODEL_FLAG)) {
+            map.put(TmplModel.MODEL_NAME, model.get(TmplModel.MODEL_NAME));
+        } else {
+            map.put(TmplModel.MODEL_NAME, model.get(TmplModel.MODEL_NAME).toString() + "<T>");
+        }
         map.put(TmplModel.FIELD_LIST, model.get(TmplModel.FIELD_LIST));
         map.put(TmplCommon.IMPORT_LIST, model.get(TmplCommon.IMPORT_LIST));
 
-        String modelName = (String) map.get(TmplModel.MODEL_NAME);
         File modelFile = new File(modelDir, modelName + ".java");
         try {
             Freemarker.getInstance().process(map, "Model.ftl", modelFile);
             genSubModel(model, baseInfo, modelDir, modelName);
         } catch (Exception e) {
             e.printStackTrace();
+            CustDialog.showException(e);
         }
     }
 
@@ -245,7 +198,7 @@ public class CodeProducer {
      * @param dataList
      * @param baseInfo
      */
-    public void genAction(List<Map<String, Object>> dataList, Map<String, Object> baseInfo, File genDir){
+    public void genAction(Set<String> importList, List<Map<String, Object>> dataList, Map<String, Object> baseInfo, File genDir){
 
         File actionDir = new File(genDir, "action");
         if(!actionDir.exists()) {
@@ -259,7 +212,7 @@ public class CodeProducer {
         if(!"".equals(fnParams)) {
             map.put(TmplAction.ACTION_PARAMS, getFnParams(dataList));
         }
-        map.put(TmplCommon.IMPORT_LIST, new ArrayList<String>());
+        map.put(TmplCommon.IMPORT_LIST, importList);
 
         File actionFile = new File(actionDir, map.get(TmplModel.MODEL_NAME) + "Action.java");
         try {

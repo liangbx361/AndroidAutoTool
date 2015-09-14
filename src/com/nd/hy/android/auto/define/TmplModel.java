@@ -7,6 +7,11 @@ package com.nd.hy.android.auto.define;
 public interface TmplModel {
 
     /**
+     * Model 基类标识
+     */
+    String BASE_MODEL_FLAG = "BaseModelFlag";
+
+    /**
      * Model 类名
      */
     String MODEL_NAME = "ModelName";

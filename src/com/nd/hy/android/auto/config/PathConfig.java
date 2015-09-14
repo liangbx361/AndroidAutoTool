@@ -3,40 +3,40 @@ package com.nd.hy.android.auto.config;
 public class PathConfig {
 
 	/**
-	 * ¹¤³ÌÅäÖÃÎÄ¼þÂ·¾¶
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½Â·ï¿½ï¿½
 	 */
 	public static final String PROJECT_CONFIG_PATH = "auto/";
 	
 	/**
-	 * ¹¤³ÌÅäÖÃÎÄ¼þÃû³Æ
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½
 	 */
 	public static final String PROJECT_CONFIG_NAME = "projectConfig.xml";
 	
 	
-	public static final String TEMPLATE_PATH = "src/com/nd/hy/android/auto/template";
+	public static final String TEMPLATE_PATH = "../template/";
 	
 	/**
-	 * Activity Ä£°åÄ¿Â¼
+	 * Activity Ä£ï¿½ï¿½Ä¿Â¼
 	 */
 	public static final String ACTIVITY_PATH = "templete/activity/";
 	
 	/**
-	 * Volley ÑùÊ½ ActivityÄ£°åÄ¿Â¼
+	 * Volley ï¿½ï¿½Ê½ ActivityÄ£ï¿½ï¿½Ä¿Â¼
 	 */
 	public static final String VOLLEY_ACTIVITY_PATH = ACTIVITY_PATH + "volley/";
 	
 	/**
-	 * AsyncTask ÑùÊ½ActivityÄ£°åÄ¿Â¼
+	 * AsyncTask ï¿½ï¿½Ê½ActivityÄ£ï¿½ï¿½Ä¿Â¼
 	 */
 	public static final String TASK_ACTIVITY_PATHC = ACTIVITY_PATH + "task/";
 	
 	/**
-	 * Volley ¿ò¼ÜÇëÇóÄ£°åÄ¿Â¼
+	 * Volley ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½Ä¿Â¼
 	 */
 	public static final String NET_VOLLEY = "template/net/volley/";
 	
 	/**
-	 * Task ¿ò¼ÜÇëÇóÄ£°åÄ¿Â¼
+	 * Task ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½Ä¿Â¼
 	 */
 	public static final String NET_TASK = "template/net/task/";
 

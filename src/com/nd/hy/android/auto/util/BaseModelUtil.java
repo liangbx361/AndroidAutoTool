@@ -42,6 +42,9 @@ public class BaseModelUtil {
 
         if(isFind) {
             baseModel = firstModel.copy();
+            for(ModelField modelField : baseModel.getModelFieldList()) {
+                modelField.setSubModel(null);
+            }
             for(ModelField modelField :baseModel.getModelFieldList()) {
                 modelField.setDataType(DataTypeUtil.checkTemplateType(modelField.getDataType()));
             }

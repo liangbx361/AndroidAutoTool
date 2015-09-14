@@ -51,4 +51,9 @@ public interface TmplRestApi {
      */
     String PARAMS_NAME = "Name";
 
+    /**
+     *
+     */
+    String PARAMS_COMMA = "Comma";
+
 }
